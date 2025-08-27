@@ -54,19 +54,13 @@
       };
 
       docker = pkgs.dockerTools.buildLayeredImage {
-        name = "registry.gitlab.com/thundertheidiot/meowdzbot";
+        name = "ghcr.io/thundertheidiot/sodexobot";
         tag = "latest";
 
         contents = "${default}";
 
         config = {
-          Env = [
-            "DATABASE_URL=sqlite:/meow.db"
-          ];
-          ExposedPorts = {
-            "8080" = {};
-          };
-          Cmd = "/bin/meowdz-bot";
+          Cmd = "/bin/sodexobot";
         };
       };
     });

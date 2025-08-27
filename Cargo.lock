@@ -1072,21 +1072,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a282da65faaf38286cf3be983213fcf1d2e2a58700e808f83f4ea9a4804bc0"
 
 [[package]]
-name = "menubot"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "either",
- "poise",
- "reqwest 0.12.23",
- "serde",
- "serde_json",
- "serenity",
- "tokio",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "mime"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1902,6 +1887,21 @@ checksum = "233504af464074f9d066d7b5416c5f9b894a5862a6506e306f7b816cdd6f1807"
 dependencies = [
  "libc",
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "sodexobot"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "either",
+ "poise",
+ "reqwest 0.12.23",
+ "serde",
+ "serde_json",
+ "serenity",
+ "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]

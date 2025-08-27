@@ -103,6 +103,8 @@ pub async fn ruokalista(
     ctx: Context<'_>,
     #[description = "Päivämäärä (YYYY-MM-DD)"] day: Option<String>,
 ) -> Result<(), Error> {
+    ctx.defer().await?;
+
     let day = match day {
         Some(day) => day,
         None => chrono::Local::now()
@@ -115,31 +117,32 @@ pub async fn ruokalista(
     let meta = menu.meta;
     let courses = menu.courses;
 
-    //     let mut reply = CreateReply::default().content(format!(r#"
-    // # [{}]({})
+    let mut buttons: Vec<CreateButton> = Vec::with_capacity(5);
+    let mut reply = CreateReply::default().content(format!(r#"
+    # [{}]({})
 
-    // "#, meta.ref_title, meta.ref_url));
+    "#, meta.ref_title, meta.ref_url));
 
     for (n, c) in courses.into_iter() {
-        let button = CreateButton::new(format!("infoday_{}_{}", day, n))
-            .label("Lisätietoja")
-            .emoji(ReactionType::Unicode("ℹ️".to_string()));
-        let acr = CreateActionRow::Buttons(vec![button]);
+	let name = c.title_fi.clone().unwrap_or("N/A".to_string());
 
-        ctx.send(
-            CreateReply::default()
-                .content(format!(
-                    r#"
-# [{}]({})
-"#,
-                    meta.ref_title, meta.ref_url
-                ))
-                .embed(fmt_course(c))
-                .components(vec![acr])
-                .ephemeral(true),
-        )
-        .await?;
+        let button = CreateButton::new(format!("infoday_{}_{}", day, n))
+            .label(format!("{name}"))
+            .emoji(ReactionType::Unicode("ℹ️".to_string()));
+
+	buttons.push(button);
+
+	reply = reply.embed(fmt_course(c));
     }
+
+
+    let acr = CreateActionRow::Buttons(buttons);
+
+    ctx.send(
+	reply
+	    .ephemeral(true)
+	    .components(vec![acr])
+    ).await?;
 
     Ok(())
 }

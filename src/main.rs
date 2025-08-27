@@ -1,14 +1,24 @@
+use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::ClientBuilder;
 use poise::serenity_prelude::GatewayIntents;
+
+use poise::serenity_prelude as serenity;
+use poise::CreateReply;
+use ::serenity::all::CreateInteractionResponse;
+use ::serenity::all::CreateInteractionResponseFollowup;
+use ::serenity::all::Interaction;
 use std::env;
 
 mod lista;
 
+use crate::lista::extra_info::extra_info;
 use crate::lista::ruokalista;
 
 pub struct Data {
     member: i8,
 }
+
+struct UserData {}
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Data, Error>;
@@ -30,6 +40,28 @@ async fn on_error(error: poise::FrameworkError<'_, Data, Error>) {
     }
 }
 
+async fn event_handler(
+    ctx: &serenity::Context,
+    event: &serenity::FullEvent,
+    _framework: poise::FrameworkContext<'_, Data, Error>,
+    _data: &Data,
+) -> Result<(), Error> {
+    match event {
+	serenity::FullEvent::InteractionCreate { interaction } => {
+	    if let Interaction::Component(c) = interaction {
+		let id = &c.data.custom_id;
+
+		if id.starts_with("infoday") {
+		    extra_info(ctx, c).await?;
+		}
+	    }
+	}
+	_ => {}
+    } 
+
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let token = env::var("DISCORD_TOKEN").expect("Set $DISCORD_TOKEN to your discord token.");
@@ -37,23 +69,22 @@ async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt::init();
 
     let options = poise::FrameworkOptions {
-	commands: vec![
-	    ruokalista(),
-	],
-	on_error: |error| Box::pin(on_error(error)),
-	..Default::default()
+        commands: vec![ruokalista()],
+        on_error: |error| Box::pin(on_error(error)),
+        event_handler: |ctx, event, framework, data| {
+            Box::pin(event_handler(ctx, event, framework, data))
+        },
+        ..Default::default()
     };
 
     let framework = poise::Framework::builder()
         .setup(move |ctx, _ready, framework| {
-	    Box::pin(async move {
-		println!("Logged in as {}", _ready.user.name);
-		poise::builtins::register_globally(ctx, &framework.options().commands).await?;
-		Ok(Data {
-		    member: 1
-		})
-	    })
-	})
+            Box::pin(async move {
+                println!("Logged in as {}", _ready.user.name);
+                poise::builtins::register_globally(ctx, &framework.options().commands).await?;
+                Ok(Data { member: 1 })
+            })
+        })
         .options(options)
         .build();
 

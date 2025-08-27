@@ -1,4 +1,6 @@
 use either::Either;
+use either::Either::Left;
+use either::Either::Right;
 use serde::Deserialize;
 use serde::Deserializer;
 use std::collections::HashMap;
@@ -6,8 +8,9 @@ use std::collections::HashMap;
 #[derive(Debug, Deserialize)]
 pub struct DailyMenu {
     pub meta: Meta,
-    #[serde[deserialize_with = "deserialize_as_vec"]]
-    pub courses: Vec<Course>,
+    // #[serde[deserialize_with = "deserialize_as_vec"]]
+    // pub courses: Vec<Course>,
+    pub courses: HashMap<String, Course>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -41,7 +44,7 @@ pub struct Meta {
     pub restaurant_mashie_id: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Course {
     pub title_fi: Option<String>,
     pub title_en: Option<String>,
@@ -55,13 +58,13 @@ pub struct Course {
     pub recipes: Option<RecipesWrapper>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct AdditionalDietInfo {
     pub dietcodeImages: Option<Vec<String>>,
     pub allergens: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct RecipesWrapper {
     #[serde(flatten)]
     #[serde[deserialize_with = "deserialize_as_vec"]]
@@ -69,23 +72,32 @@ pub struct RecipesWrapper {
     pub hideAll: Option<HideAll>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct HideAll {
     pub dietcodes: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Recipe {
     pub name: String,
     pub ingredients: StringOrEmptyList,
     pub nutrients: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 #[serde(transparent)]
 pub struct StringOrEmptyList {
     #[serde(with = "either::serde_untagged")]
     inner: Either<String, Vec<()>>,
+}
+
+impl ToString for StringOrEmptyList {
+    fn to_string(&self) -> String {
+        match &self.inner {
+            Left(s) => s.clone(),
+            Right(_) => "".to_string(),
+        }
+    }
 }
 
 #[test]

@@ -37,7 +37,9 @@ async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt::init();
 
     let options = poise::FrameworkOptions {
-	commands: vec![],
+	commands: vec![
+	    ruokalista(),
+	],
 	on_error: |error| Box::pin(on_error(error)),
 	..Default::default()
     };

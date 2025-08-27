@@ -18,9 +18,11 @@ const CENTRIA: u8 = 129;
 
 #[poise::command(slash_command)]
 pub async fn ruokalista(ctx: Context<'_>) -> Result<(), Error> {
+    let menu = fetch_day(None).await?;
+
     ctx.send(
 	CreateReply::default()
-	    .content("ligma balls")
+	    .content(format!("{menu:#?}", ))
     .ephemeral(true),
     ).await?;
 

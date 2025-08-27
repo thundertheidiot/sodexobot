@@ -1,7 +1,7 @@
-use crate::lista::Recipe;
-use crate::lista::fetch_day;
 use crate::CreateInteractionResponseFollowup;
 use crate::Error;
+use crate::lista::Recipe;
+use crate::lista::fetch_day;
 use poise::serenity_prelude as serenity;
 use serenity::all::ComponentInteraction;
 use serenity::all::CreateInteractionResponse;
@@ -23,14 +23,19 @@ Ravintosisältö
 "#,
         recipe.name,
         recipe.ingredients.to_string(),
-        recipe.nutrients.split("|")
-	    .map(|s| s.trim_start())
-	    .collect::<Vec<&str>>()
-	    .join("\n")
+        recipe
+            .nutrients
+            .split("|")
+            .map(|s| s.trim_start())
+            .collect::<Vec<&str>>()
+            .join("\n")
     )
 }
 
-pub async fn extra_info(ctx: &serenity::Context, interaction: &ComponentInteraction) -> Result<(), Error> {
+pub async fn extra_info(
+    ctx: &serenity::Context,
+    interaction: &ComponentInteraction,
+) -> Result<(), Error> {
     let id = &interaction.data.custom_id;
     println!("{}", id);
 
@@ -44,12 +49,31 @@ pub async fn extra_info(ctx: &serenity::Context, interaction: &ComponentInteract
     let menu = fetch_day(day).await?;
     let course = menu.courses.get(n).ok_or("incorrect n")?.to_owned();
 
-    let text = course.recipes.ok_or("invalid recipe json")?
-	.recipes.iter()
-	.map(|r| fmt_recipe(&r))
-	.collect::<Vec<String>>()
-	.join("");
-    
+    let allergens = course
+        .additionalDietInfo
+        .allergens
+        .unwrap_or("N/A".to_string());
+
+    let text = course
+        .recipes
+        .ok_or("invalid recipe json")?
+        .recipes
+        .iter()
+        .map(|r| fmt_recipe(&r))
+        .collect::<Vec<String>>()
+        .join("");
+
+    let text = format!(
+        r#"
+# Allergeenit
+```
+{}
+```
+{}
+"#,
+        allergens, text
+    );
+
     let followup = CreateInteractionResponseFollowup::new()
         .content(text)
         .ephemeral(true);

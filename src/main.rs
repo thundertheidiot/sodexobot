@@ -1,12 +1,12 @@
-use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::ClientBuilder;
+use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::GatewayIntents;
 
-use poise::serenity_prelude as serenity;
-use poise::CreateReply;
 use ::serenity::all::CreateInteractionResponse;
 use ::serenity::all::CreateInteractionResponseFollowup;
 use ::serenity::all::Interaction;
+use poise::CreateReply;
+use poise::serenity_prelude as serenity;
 use std::env;
 
 mod lista;
@@ -47,17 +47,17 @@ async fn event_handler(
     _data: &Data,
 ) -> Result<(), Error> {
     match event {
-	serenity::FullEvent::InteractionCreate { interaction } => {
-	    if let Interaction::Component(c) = interaction {
-		let id = &c.data.custom_id;
+        serenity::FullEvent::InteractionCreate { interaction } => {
+            if let Interaction::Component(c) = interaction {
+                let id = &c.data.custom_id;
 
-		if id.starts_with("infoday") {
-		    extra_info(ctx, c).await?;
-		}
-	    }
-	}
-	_ => {}
-    } 
+                if id.starts_with("infoday") {
+                    extra_info(ctx, c).await?;
+                }
+            }
+        }
+        _ => {}
+    }
 
     Ok(())
 }

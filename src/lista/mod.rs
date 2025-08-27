@@ -8,8 +8,8 @@ use serenity::{
 
 use crate::{Context, Error, lista::structs::Recipe};
 
-mod structs;
 pub mod extra_info;
+mod structs;
 
 use structs::{Course, DailyMenu};
 
@@ -27,6 +27,17 @@ struct DietInfo {
     laktoositon: bool,
     maidoton: bool,
     vahalaktoosinen: bool,
+}
+
+struct FoodInfo {
+    co2: bool,
+    heart: bool,
+    vegan: bool,
+    student_recommendation: bool,
+    pork: bool,
+    fi_meat: bool,
+    eu_meat: bool,
+    other_meat: bool,
 }
 
 fn to_diet_info(dietcodes: String) -> DietInfo {
@@ -52,11 +63,63 @@ fn to_diet_info(dietcodes: String) -> DietInfo {
     diet_info
 }
 
+fn to_food_info(images: Vec<String>) -> FoodInfo {
+    let mut food_info = FoodInfo {
+        co2: false,
+        heart: false,
+        vegan: false,
+        student_recommendation: false,
+        pork: false,
+        fi_meat: false,
+        eu_meat: false,
+        other_meat: false,
+    };
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/sodexo-leaf.svg".to_string()) {
+	food_info.co2 = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/sydan.svg".to_string()) {
+	food_info.heart = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/vege.svg".to_string()) {
+	food_info.vegan = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/omena.svg".to_string()) {
+	food_info.student_recommendation = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/possu.svg".to_string()) {
+	food_info.pork = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/liha-fi-new.svg".to_string()) {
+	food_info.fi_meat = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/liha-eu-new.svg".to_string()) {
+	food_info.eu_meat = true;
+    }
+
+    if images.contains(&"https://www.sodexo.fi/sites/default/themes/sodexo/images/liha-muu-new.svg".to_string()) {
+	food_info.other_meat = true;
+    }
+
+    food_info
+}
+
 fn fmt_course(course: Course) -> CreateEmbed {
-    let mut embed = CreateEmbed::new().title(course.title_fi.unwrap_or("N/A".to_string()));
+    let title = course.title_fi.unwrap_or("N/A".to_string());
+    let price = course.price.unwrap_or("N/A".to_string());
+
+    let mut embed = CreateEmbed::new()
+	.title(format!("{} - {}", title, price));
 
     let category = course.category.unwrap_or("N/A".to_string());
     let diet_info = to_diet_info(course.dietcodes.unwrap_or("".to_string()));
+    let food_info = to_food_info(course.additionalDietInfo.dietcodeImages.unwrap_or(vec![]));
 
     if category.contains("VEGAN") {
         embed = embed.color(Colour::DARK_GREEN);
@@ -72,12 +135,20 @@ fn fmt_course(course: Course) -> CreateEmbed {
 
     embed = embed.description(format!(
         r#"
-Gluteeniton {}
-Laktoositon {}
-Maidoton {}
-Vähälaktoosinen {}
+- Gluteeniton {}
+- Laktoositon {}
+- Maidoton {}
+- Vähälaktoosinen {}
 
-Hinta {}
+- =< 0.5 kg CO2 Päästöt {}
+- Parempi Valinta {}
+- Vegaaninen {}
+- Opiskelijaruokailusuositusten mukainen {}
+
+- Sisältää porsaanlihaa {}
+- Liha Suomesta {}
+- Liha EU:sta {}
+- Liha muualta {}
 "#,
         if diet_info.gluteeniton { "✅" } else { "❌" },
         if diet_info.laktoositon { "✅" } else { "❌" },
@@ -87,12 +158,15 @@ Hinta {}
         } else {
             "❌"
         },
-        course.price.unwrap_or("N/A".to_string()),
-        // if course.recipes.is_some() {
-        //     let recipes = course.recipes.unwrap();
 
-        //     fmt_recipe(recipes.recipes.first().unwrap())
-        // } else { "".to_string() }
+	if food_info.co2 { "✅" } else { "❌" },
+	if food_info.heart { "✅" } else { "❌" },
+	if food_info.vegan { "✅" } else { "❌" },
+	if food_info.student_recommendation { "✅" } else { "❌" },
+	if food_info.pork { "✅" } else { "❌" },
+	if food_info.fi_meat { "✅" } else { "❌" },
+	if food_info.eu_meat { "✅" } else { "❌" },
+	if food_info.other_meat { "✅" } else { "❌" },
     ));
 
     embed
@@ -118,31 +192,47 @@ pub async fn ruokalista(
     let courses = menu.courses;
 
     let mut buttons: Vec<CreateButton> = Vec::with_capacity(5);
-    let mut reply = CreateReply::default().content(format!(r#"
+    let mut reply = CreateReply::default().content(format!(
+        r#"
     # [{}]({})
 
-    "#, meta.ref_title, meta.ref_url));
+    "#,
+        meta.ref_title, meta.ref_url
+    ));
 
-    for (n, c) in courses.into_iter() {
-	let name = c.title_fi.clone().unwrap_or("N/A".to_string());
+    for (n, c) in courses.clone().into_iter() {
+        let name = c.title_fi.clone().unwrap_or("N/A".to_string());
 
         let button = CreateButton::new(format!("infoday_{}_{}", day, n))
             .label(format!("{name}"))
             .emoji(ReactionType::Unicode("ℹ️".to_string()));
 
-	buttons.push(button);
+        buttons.push(button);
 
-	reply = reply.embed(fmt_course(c));
+        reply = reply.embed(fmt_course(c));
     }
 
+    // this is a length check for the button vec
+    // discord only allows 5 buttons per actionrow, there might theoretically be more
+    // TODO figure out a better way
+    let mut finalbuttons: Vec<Vec<CreateButton>> = Vec::new();
+    let mut acrs: Vec<CreateActionRow> = Vec::new();
 
-    let acr = CreateActionRow::Buttons(buttons);
+    {
+        while buttons.len() > 5 {
+            finalbuttons.push(buttons.drain(0..5).collect());
+        }
 
-    ctx.send(
-	reply
-	    .ephemeral(true)
-	    .components(vec![acr])
-    ).await?;
+        finalbuttons.push(buttons);
+
+        for i in finalbuttons {
+            let acr = CreateActionRow::Buttons(i);
+            acrs.push(acr);
+        }
+    }
+
+    // send the message
+    ctx.send(reply.ephemeral(true).components(acrs)).await?;
 
     Ok(())
 }

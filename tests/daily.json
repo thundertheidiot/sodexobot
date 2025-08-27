@@ -1,0 +1,145 @@
+{
+	"meta": {
+		"generated_timestamp": 1756289861,
+		"ref_url": "https://www.sodexo.fi/ravintolat/kokkola/savonia-amk-centria-campus",
+		"ref_title": "Campusravintola",
+		"restaurant_mashie_id": "FI739646K"
+	},
+	"courses": {
+		"1": {
+			"title_fi": "Kikherne-kasviscurry ja riisi",
+			"title_en": "Chickpea vegetable curry and Rice",
+			"category": "FROM THE FIELD-VEGAN",
+			"meal_category": null,
+			"dietcodes": "G, M",
+			"properties": "G, M",
+			"additionalDietInfo": {
+				"dietcodeImages": [
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sodexo-leaf.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sydan.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/vege.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/omena.svg"
+				],
+				"allergens": "Chili, Herneet, Hiivauute, Kaura, Korianteri, Rikkidioksidi ja sulfiitit, Sipuli, Sitrukset, Soijapavut, Valkosipuli"
+			},
+			"price": "2,95 € / 7,00 € / 10,00 €",
+			"recipes": {
+				"0": {
+					"name": "Kikherne-kasviscurry",
+					"ingredients": "Parsakaali,vihreä papu, Vesi,Porkkana, kookosmaito, vesi, [SOIJAPAPU, mustapapu, KIKHERNE, rapsiöljy, suola, Vesi, korianteri, suola, puuvillansiemenöljy, juustokumina, chili, punainen linssijauho, valkosipuli, inkivääri, kurkuma, (etikkahappo), anis, sarviapila, neilikka, kaneli, laakerinlehti.,sitruunamehutiiviste, sitruunankuori ja mustapippuri. Sipuli, keräkaali, tomaattisose, sokeri fariinisokeri, Maissitärkkelys, öljy, Sitruunatäysmehu,punaviinietikka, Suola, curry[Kaneli, kardemumma, neilikka, korianteri, kumina, fenkoli, inkivääri, sarviapila, kurkuma, pippuri, yrtit, sipuli, valkosipuli, sokeri], paprikajauhe Korianteri, liemijauhe[Suola, maltodekstriini, kasvisjauhe (palsternakka, kukkakaali, sipuli, purjosipuli, valkosipuli, valkokaali, porkkanamehu, lipstikanjuuri, juuripersilja), oliiviöljy, aromit, sienimehu",
+					"nutrients": "Energia/Energy: 463.67 kJ | Energia/Energy: 110.67 kcal | Rasva/Fat: 4.86 g | Hiilihydraatit/Carbohydrate: 12.00 g | Proteiinit/Protein: 3.59 g | Kuidut/Fibre: 2.72 g | Suola/Salt: 0.82 g"
+				},
+				"1": {
+					"name": "Future50 KEITETTY TÄYSJYVÄKAURA",
+					"ingredients": "Vesi (66%), kaura suurimo gtn[] (33%), öljy rapsi menu 10l[] (1%)",
+					"nutrients": "Energia/Energy: 581.61 kJ | Energia/Energy: 138.98 kcal | Rasva/Fat: 3.69 g | Hiilihydraatit/Carbohydrate: 18.15 g | Proteiinit/Protein: 4.72 g | Kuidut/Fibre: 6.17 g | Suola/Salt: 0.00 g"
+				},
+				"hideAll": {
+					"dietcodes": "M"
+				}
+			}
+		},
+		"2": {
+			"title_fi": "Lohikiusaus",
+			"title_en": "Salmon casserole seasoned with lemon",
+			"category": "From our favorites 1",
+			"meal_category": null,
+			"dietcodes": "G, L",
+			"properties": "G, L",
+			"additionalDietInfo": {
+				"dietcodeImages": [
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sydan.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/omena.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/liha-muu-new.svg"
+				],
+				"allergens": "Gluteenia sisältävät viljat ja -tuotteet, Kala, Maito, Vehnä"
+			},
+			"price": "2,95 € / 7,00 € / 10,00 €",
+			"recipes": {
+				"0": {
+					"name": "Lohikiusaus",
+					"ingredients": "Peruna kasvirasvasekoite ltn[rasvaton MAITO, vesi, rypsiöljy, muunnettu maissi- ja tapiokatärkkelys, suomalainen viljety KIRJOLOHI., sipuli,Tilli, liemijauhe[Suola, maltodekstriini, KALAJAUHO (turska), perunatärkkelys, kasvirasva, sipulijauhe, hiivauute, mausteet (mm. valkosipuli),sitruunamehujauhe, aromi.mustapippuri, paprikajauhe",
+					"nutrients": "Energia/Energy: 493.95 kJ | Energia/Energy: 118.38 kcal | Rasva/Fat: 5.54 g | Hiilihydraatit/Carbohydrate: 11.54 g | Proteiinit/Protein: 4.38 g | Kuidut/Fibre: 0.78 g | Suola/Salt: 0.70 g"
+				},
+				"hideAll": {
+					"dietcodes": "G, L"
+				}
+			}
+		},
+		"3": {
+			"title_fi": "Kasvissosekeitto",
+			"title_en": "Vegetable puree Soup ",
+			"category": "FROM THE SOUP BOWL",
+			"meal_category": null,
+			"dietcodes": "G, M",
+			"properties": "G, M",
+			"additionalDietInfo": {
+				"dietcodeImages": [
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sodexo-leaf.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sydan.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/vege.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/omena.svg"
+				],
+				"allergens": "Sipuli, Soijapavut, Valkosipuli"
+			},
+			"price": "2,95 € / 7,15 € / 9,50 €",
+			"recipes": {
+				"0": {
+					"name": "Kasvissosekeitto",
+					"ingredients": "Vesi, peruna,palsternakka,,porkkana,bataatti soija \"kerma\" L[vesi, auringonkukkaöljy,  SOIJAPAVUT, sokeri, merisuola, aromi, suola, liemijauhe[Suola, kasvisjauhe (palsternakka, kukkakaali, sipuli, purjosipuli, valkosipuli, valkokaali, porkkanamehu, lipstikanjuuri , juuripersilja ), oliiviöljy, aromit, sienimehu. Sokeri, Kirveli \r\n",
+					"nutrients": "Energia/Energy: 190.94 kJ | Energia/Energy: 45.70 kcal | Rasva/Fat: 1.11 g | Hiilihydraatit/Carbohydrate: 6.90 g | Proteiinit/Protein: 0.77 g | Kuidut/Fibre: 0.31 g | Suola/Salt: 0.46 g"
+				},
+				"hideAll": {
+					"dietcodes": "G, M"
+				}
+			}
+		},
+		"4": {
+			"title_fi": "Leipälounas: Täytetty patonki kanatäytteellä",
+			"title_en": "Bread lunch: Stuffed baguette with chicken filling",
+			"category": "From our bakery",
+			"meal_category": null,
+			"dietcodes": "L",
+			"properties": "L",
+			"additionalDietInfo": {
+				"dietcodeImages": [
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/liha-fi-new.svg"
+				],
+				"allergens": "Maito, Munat, Vehnä"
+			},
+			"price": "2,95 € / 8,45 € / 10,00 €",
+			"recipes": {
+				"0": {
+					"name": "PATONKI KINKKU-MEETWURSTITÄYTTEELLÄ pp",
+					"ingredients": [],
+					"nutrients": "Energia/Energy: 1124.21 kJ | Energia/Energy: 266.90 kcal | Rasva/Fat: 14.56 g | Hiilihydraatit/Carbohydrate: 28.79 g | Proteiinit/Protein: 6.69 g | Kuidut/Fibre: 1.30 g | Suola/Salt: 0.94 g"
+				},
+				"hideAll": {
+					"dietcodes": "M"
+				}
+			}
+		},
+		"5": {
+			"title_fi": "Cappuccino moussea",
+			"title_en": "Cappuccino Mousse",
+			"category": "FROM THE SWEET",
+			"meal_category": null,
+			"dietcodes": "G, L",
+			"properties": "G, L",
+			"additionalDietInfo": {
+				"allergens": "Maito, Soijapavut"
+			},
+			"price": "1,00 € / 1,20 € / 1,20 €",
+			"recipes": {
+				"0": {
+					"name": "MOUSSE CAPPUCCINO.",
+					"ingredients": "maitojuoma arki kevyt 1l[MAITO, MAITOVALMISTE ja D-vitamiini] (55%), jauhe mousse suklaa 1,44kg[Suklaajauhe 62 % (kaakao, sokeri), sokeri, vähärasvainen kaakaojauhe, kokonaan kovetettu kookosrasva, LAKTOOSI, liivate (nauta),emulgointiaineet (E 472a, E 471), MAITOPROTEIINI, stabilointiaine (natriumalginaatti, E 464). Saattaa sisältää jäämiägluteenista jakananmunasta.] (25%), kasvirasvasekoite kuohu 1l ltn[KIRNUMAITO, vesi, laktoositon rasvaton MAITO, kokonaan kovetettu palmuöljy#, kookosöljy, muunnettu tärkkelys, emulgointiaineet(rasva happojen sakkaroosiesterit (kasvirasvapohjainen), rasvahappojen mono- ja diglyseridit (kasvirasvapohjainen), SOIJALESITIINI),stabilointiaineet (guarkumi, johanneksenleipäpuujauhe), laktaasientsyymi, aromi. #Kestävän kehityksen mukaisesti tuotettua, sertifioitua jajäljitettävää palmuöljyä.] (17%), kaakaojauhe 1kg[kaakaojauhe 20/22%] (2%), kahvijuomajauhe pika 200g[] (2%)",
+					"nutrients": "Energia/Energy: 801.47 kJ | Energia/Energy: 191.24 kcal | Rasva/Fat: 9.92 g | Hiilihydraatit/Carbohydrate: 18.73 g | Proteiinit/Protein: 5.18 g | Kuidut/Fibre: 2.58 g | Suola/Salt: 0.07 g"
+				},
+				"hideAll": {
+					"dietcodes": "G, L"
+				}
+			}
+		}
+	}
+}

@@ -12,11 +12,11 @@ fn fmt_recipe(recipe: &Recipe) -> String {
         r#"
 ## {}
 
-Ainesosat
+### Ainesosat
 ```
 {}
 ```
-Ravintosisältö
+### Ravintosisältö
 ```
 {}
 ```
@@ -50,7 +50,7 @@ pub async fn extra_info(
     let course = menu.courses.get(n).ok_or("incorrect n")?.to_owned();
 
     let allergens = course
-        .additionalDietInfo
+        .additional_diet_info
         .allergens
         .unwrap_or("N/A".to_string());
 

@@ -9,7 +9,8 @@ use poise::CreateReply;
 use poise::serenity_prelude as serenity;
 use std::env;
 
-mod lista;
+pub (crate) mod lista;
+pub (crate) mod types;
 
 use crate::lista::extra_info::extra_info;
 use crate::lista::ruokalista;

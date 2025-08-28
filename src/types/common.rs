@@ -14,7 +14,7 @@ where
     Ok(map.into_values().collect())
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Meta {
     pub generated_timestamp: i64,
     pub ref_url: String,

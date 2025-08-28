@@ -77,13 +77,15 @@ async fn main() -> Result<(), Error> {
         },
         ..Default::default()
     };
+    
+    let scheduler = JobScheduler::new().await?;
 
     let framework = poise::Framework::builder()
         .setup(move |ctx, _ready, framework| {
             Box::pin(async move {
                 println!("Logged in as {}", _ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
-                Ok(Data { member: 1 })
+                Ok(Data { sched: Arc::new(Mutex::new(scheduler)) })
             })
         })
         .options(options)

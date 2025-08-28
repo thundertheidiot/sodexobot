@@ -1,10 +1,31 @@
+use crate::types::common::Course;
 use crate::types::day::DailyMenu;
 use crate::types::week::WeeklyMenu;
+use serde::Deserialize;
+use serde::Deserializer;
+use std::collections::HashMap;
 
 pub mod common;
 pub mod day;
 // pub mod diet_info;
 pub mod week;
+
+fn courses_as_hashmap<'de, D>(deserializer: D) -> Result<HashMap<String, Course>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Helper {
+        Map(HashMap<String, Course>),
+        List(Vec<Course>),
+    }
+
+    match Helper::deserialize(deserializer)? {
+        Helper::Map(map) => Ok(map),
+        Helper::List(_) => Ok(HashMap::new()), // discard list, return empty
+    }
+}
 
 #[test]
 fn test_deserialize_daily_menu() {

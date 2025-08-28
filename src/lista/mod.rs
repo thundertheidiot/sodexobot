@@ -181,7 +181,7 @@ pub async fn viikon_lista(ctx: Context<'_>) -> Result<(), Error> {
 
     let menu = fetch_week().await?;
     let date: Vec<&str> = menu.timeperiod.split('.').collect();
-    let day = date.first().ok_or("Invalid date in json")?;
+    let day = date.first().ok_or("invalid date in json")?;
 
     // TODO this is garbage
     let date = chrono::Local::now()

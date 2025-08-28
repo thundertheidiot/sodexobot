@@ -1,3 +1,5 @@
 /target
 .env
 .direnv
+jobs.json
+result

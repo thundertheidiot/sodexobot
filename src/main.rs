@@ -1,11 +1,17 @@
 use crate::lista::viikon_lista;
+use crate::schedule::DataJob;
+use crate::schedule::StoredJob;
+use crate::schedule::create_scheduled_day_post;
 use crate::schedule::schedule_day;
+use ::serenity::all::ChannelId;
 use ::serenity::all::CreateMessage;
 use poise::serenity_prelude::ClientBuilder;
 use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::GatewayIntents;
+use std::fs::read_to_string;
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use uuid::Uuid;
 
 use ::serenity::all::CreateInteractionResponse;
 use ::serenity::all::CreateInteractionResponseFollowup;
@@ -25,6 +31,7 @@ use crate::lista::ruokalista;
 
 pub struct Data {
     sched: Arc<Mutex<JobScheduler>>,
+    job_uuids: Arc<Mutex<Vec<DataJob>>>,
 }
 
 struct UserData {}
@@ -102,8 +109,27 @@ async fn main() -> Result<(), Error> {
                 println!("Logged in as {}", _ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
 
+                let mut uuids: Vec<DataJob> = Vec::new();
+
+		let jobs: Vec<StoredJob> = serde_json::from_str(&read_to_string("jobs.json").unwrap_or("[]".to_string()))?;
+
+                for i in jobs {
+                    if let Ok(job) =
+                        create_scheduled_day_post(ctx, &i.cron, ChannelId::new(i.channel_id))
+                    {
+                        uuids.push(DataJob {
+                            uuid: job.guid(),
+                            cron: i.cron,
+                            channel_id: i.channel_id,
+                        });
+
+                        scheduler.add(job).await?;
+                    }
+                }
+
                 Ok(Data {
                     sched: Arc::new(Mutex::new(scheduler)),
+                    job_uuids: Arc::new(Mutex::new(uuids)),
                 })
             })
         })

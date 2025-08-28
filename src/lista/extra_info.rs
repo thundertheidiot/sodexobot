@@ -48,7 +48,7 @@ pub async fn extra_info(
     let day = info.pop().ok_or("cannot get day")?;
 
     let menu = fetch_day(day).await?;
-    let course = menu.courses.get(n).ok_or("incorrect n")?.to_owned();
+    let course = menu.courses.get(n).ok_or("invalid n")?.to_owned();
 
     let allergens = course
         .additional_diet_info

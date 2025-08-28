@@ -1,6 +1,11 @@
+use crate::lista::viikon_lista;
+use crate::schedule::schedule_day;
+use ::serenity::all::CreateMessage;
 use poise::serenity_prelude::ClientBuilder;
 use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::GatewayIntents;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 use ::serenity::all::CreateInteractionResponse;
 use ::serenity::all::CreateInteractionResponseFollowup;
@@ -8,15 +13,18 @@ use ::serenity::all::Interaction;
 use poise::CreateReply;
 use poise::serenity_prelude as serenity;
 use std::env;
+use tokio_cron_scheduler::Job;
+use tokio_cron_scheduler::JobScheduler;
 
-pub (crate) mod lista;
-pub (crate) mod types;
+pub(crate) mod lista;
+pub(crate) mod schedule;
+pub(crate) mod types;
 
 use crate::lista::extra_info::extra_info;
 use crate::lista::ruokalista;
 
 pub struct Data {
-    member: i8,
+    sched: Arc<Mutex<JobScheduler>>,
 }
 
 struct UserData {}
@@ -63,6 +71,12 @@ async fn event_handler(
     Ok(())
 }
 
+#[poise::command(prefix_command, hide_in_help = true)]
+pub async fn register(ctx: Context<'_>) -> Result<(), Error> {
+    poise::builtins::register_application_commands_buttons(ctx).await?;
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let token = env::var("DISCORD_TOKEN").expect("Set $DISCORD_TOKEN to your discord token.");
@@ -70,22 +84,27 @@ async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt::init();
 
     let options = poise::FrameworkOptions {
-        commands: vec![ruokalista()],
+        commands: vec![register(), ruokalista(), viikon_lista(), schedule_day()],
         on_error: |error| Box::pin(on_error(error)),
         event_handler: |ctx, event, framework, data| {
             Box::pin(event_handler(ctx, event, framework, data))
         },
         ..Default::default()
     };
-    
+
     let scheduler = JobScheduler::new().await?;
+
+    scheduler.start().await?;
 
     let framework = poise::Framework::builder()
         .setup(move |ctx, _ready, framework| {
             Box::pin(async move {
                 println!("Logged in as {}", _ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
-                Ok(Data { sched: Arc::new(Mutex::new(scheduler)) })
+
+                Ok(Data {
+                    sched: Arc::new(Mutex::new(scheduler)),
+                })
             })
         })
         .options(options)

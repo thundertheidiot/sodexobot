@@ -1,3 +1,6 @@
+use crate::types::week::WeeklyMenu;
+use chrono::Datelike;
+use chrono::Days;
 use poise::CreateReply;
 use serenity::all::CreateButton;
 use serenity::all::ReactionType;
@@ -169,6 +172,38 @@ pub async fn ruokalista(
     Ok(())
 }
 
+#[poise::command(slash_command)]
+pub async fn viikon_lista(
+    ctx: Context<'_>,
+) -> Result<(), Error> {
+    ctx.defer().await?;
+
+    let menu = fetch_week().await?;
+    let date: Vec<&str> = menu.timeperiod.split('.').collect();
+    let day = date.first().ok_or("Invalid date in json")?;
+
+    let date = chrono::Local::now()
+        .with_day(day.parse()?)
+        .ok_or("invalid day")?
+        ;
+
+    let menus: Vec<(String, DailyMenu)> = menu.into();
+
+    for (i, (n, m)) in menus.into_iter().enumerate() {
+	let day = date.checked_add_days(Days::new(i as u64))
+	    .ok_or("what the fuck")?
+	    .format("%Y-%m-%d")
+	    .to_string();
+	
+	let reply = fmt_day(&day, m, Some(&n));
+	ctx.send(reply).await?;
+    }
+
+    Ok(())
+}
+
+const CENTRIA: u8 = 129;
+
 pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
     let url = format!(
         "https://sodexo.fi/ruokalistat/output/daily_json/{}/{}",
@@ -176,6 +211,17 @@ pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
     );
 
     let menu = reqwest::get(url).await?.json::<DailyMenu>().await?;
+
+    Ok(menu)
+}
+
+pub async fn fetch_week() -> Result<WeeklyMenu, Error> {
+    let url = format!(
+        "https://sodexo.fi/ruokalistat/output/weekly_json/{}",
+        CENTRIA, 
+    );
+
+    let menu = reqwest::get(url).await?.json::<WeeklyMenu>().await?;
 
     Ok(menu)
 }

@@ -2,9 +2,9 @@ use crate::CreateInteractionResponseFollowup;
 use crate::Error;
 use crate::lista::Recipe;
 use crate::lista::fetch_day;
+use ::serenity::all::CreateEmbed;
 use poise::serenity_prelude as serenity;
 use serenity::all::ComponentInteraction;
-use ::serenity::all::CreateEmbed;
 use serenity::all::CreateInteractionResponse;
 use serenity::all::CreateInteractionResponseMessage;
 

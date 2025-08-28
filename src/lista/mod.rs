@@ -88,8 +88,12 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
     # [{}](<{}>) - {day}
     {}"#,
                 meta.ref_title,
-		meta.ref_url,
-		if let Some(string) = extra_string { string } else {""}
+                meta.ref_url,
+                if let Some(string) = extra_string {
+                    string
+                } else {
+                    ""
+                }
             ));
 
             for (n, c) in courses.into_iter() {
@@ -98,17 +102,16 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
                 let mut button = CreateButton::new(format!("infoday_{}_{}", day, n))
                     .emoji(ReactionType::Unicode("ℹ️".to_string()));
 
-
-		match name.len() {
-		    n if n >= 80 => {
-			let name = &name[0..77];
-			let name = name.to_string() + "...";
-			button = button.label(name);
-		    },
-		    _ => {
-			button = button.label(name);
-		    }
-		}
+                match name.len() {
+                    n if n >= 80 => {
+                        let name = &name[0..77];
+                        let name = name.to_string() + "...";
+                        button = button.label(name);
+                    }
+                    _ => {
+                        button = button.label(name);
+                    }
+                }
 
                 buttons.push(button);
 
@@ -173,30 +176,29 @@ pub async fn ruokalista(
 }
 
 #[poise::command(slash_command)]
-pub async fn viikon_lista(
-    ctx: Context<'_>,
-) -> Result<(), Error> {
+pub async fn viikon_lista(ctx: Context<'_>) -> Result<(), Error> {
     ctx.defer().await?;
 
     let menu = fetch_week().await?;
     let date: Vec<&str> = menu.timeperiod.split('.').collect();
     let day = date.first().ok_or("Invalid date in json")?;
 
+    // TODO this is garbage
     let date = chrono::Local::now()
         .with_day(day.parse()?)
-        .ok_or("invalid day")?
-        ;
+        .ok_or("invalid day")?;
 
     let menus: Vec<(String, DailyMenu)> = menu.into();
 
     for (i, (n, m)) in menus.into_iter().enumerate() {
-	let day = date.checked_add_days(Days::new(i as u64))
-	    .ok_or("what the fuck")?
-	    .format("%Y-%m-%d")
-	    .to_string();
-	
-	let reply = fmt_day(&day, m, Some(&n));
-	ctx.send(reply).await?;
+        let day = date
+            .checked_add_days(Days::new(i as u64))
+            .ok_or("what the fuck")?
+            .format("%Y-%m-%d")
+            .to_string();
+
+        let reply = fmt_day(&day, m, Some(&n));
+        ctx.send(reply).await?;
     }
 
     Ok(())
@@ -218,7 +220,7 @@ pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
 pub async fn fetch_week() -> Result<WeeklyMenu, Error> {
     let url = format!(
         "https://sodexo.fi/ruokalistat/output/weekly_json/{}",
-        CENTRIA, 
+        CENTRIA,
     );
 
     let menu = reqwest::get(url).await?.json::<WeeklyMenu>().await?;

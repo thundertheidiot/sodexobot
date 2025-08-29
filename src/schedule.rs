@@ -91,7 +91,10 @@ pub async fn save_jobs(
     Ok(())
 }
 
-#[poise::command(slash_command)]
+#[poise::command(
+    slash_command,
+    required_permissions = "MANAGE_MESSAGES",
+)]
 pub async fn schedule_day(
     ctx: Context<'_>,
     #[description = "Cron schedule"] cron: String,
@@ -119,6 +122,65 @@ pub async fn schedule_day(
 
     ctx.send(CreateReply::default().content("Ajoitettu ruokalistaviesti luotu").ephemeral(true))
         .await?;
+
+    Ok(())
+}
+
+#[poise::command(
+    slash_command,
+    required_permissions = "MANAGE_MESSAGES"
+)]
+pub async fn list_scheduled(
+    ctx: Context<'_>,
+) -> Result<(), Error> {
+    ctx.defer().await?;
+
+    let channel_id = ctx.channel_id().get();
+
+    let jobs = ctx.data().job_uuids.lock().await;
+    fn fmt_job(job: &DataJob) -> String {
+	format!("`{}` - `{}`", job.uuid, job.cron)
+    }
+
+    let jobs = jobs
+	.iter()
+	.filter_map(|j| {
+	    if j.channel_id == channel_id {
+		Some(fmt_job(j))
+	    } else {
+		None
+	    }
+	})
+	.collect::<Vec<String>>()
+	.join("\n");
+
+    ctx.send(
+	CreateReply::default()
+	    .content(jobs)
+    ).await?;
+
+    Ok(())
+}
+
+#[poise::command(
+    slash_command,
+    required_permissions = "MANAGE_MESSAGES"
+)]
+pub async fn delete_scheduled(
+    ctx: Context<'_>,
+    #[description = "Uuid of scheduled job"] uuid: String,
+) -> Result<(), Error> {
+    let uuid = Uuid::parse_str(&uuid)?;
+
+    {
+	let sched = ctx.data().sched.lock().await;
+	sched.remove(&uuid).await?;
+    }
+
+    let mut jobs = ctx.data().job_uuids.lock().await;
+    jobs.retain(|job| job.uuid != uuid);
+
+    save_jobs(ctx).await?;
 
     Ok(())
 }

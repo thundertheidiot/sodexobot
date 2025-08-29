@@ -1,4 +1,6 @@
 use crate::lista::viikon_lista;
+use crate::schedule::delete_scheduled;
+use crate::schedule::list_scheduled;
 use crate::schedule::DataJob;
 use crate::schedule::StoredJob;
 use crate::schedule::create_scheduled_day_post;
@@ -91,7 +93,14 @@ async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt::init();
 
     let options = poise::FrameworkOptions {
-        commands: vec![register(), ruokalista(), viikon_lista(), schedule_day()],
+        commands: vec![
+	    register(),
+	    ruokalista(),
+	    viikon_lista(),
+	    schedule_day(),
+	    list_scheduled(),
+	    delete_scheduled(),
+	],
         on_error: |error| Box::pin(on_error(error)),
         event_handler: |ctx, event, framework, data| {
             Box::pin(event_handler(ctx, event, framework, data))

@@ -29,12 +29,13 @@ pub struct Course {
     pub category: Option<String>,
     pub meal_category: Option<String>,
     #[serde(rename(deserialize = "dietcodes"))]
-    #[serde[deserialize_with = "deserialize_diet_info"]]
+    #[serde(deserialize_with = "deserialize_diet_info")]
     #[serde(default)]
     pub diet_info: DietInfo,
     // Repeat of dietcodes
     pub properties: Option<String>,
     #[serde(rename(deserialize = "additionalDietInfo"))]
+    #[serde(default)]
     pub additional_diet_info: AdditionalDietInfo,
     pub price: Option<String>,
 
@@ -44,10 +45,19 @@ pub struct Course {
 #[derive(Debug, Clone, Deserialize)]
 pub struct AdditionalDietInfo {
     #[serde(rename(deserialize = "dietcodeImages"))]
-    #[serde[deserialize_with = "deserialize_food_info"]]
+    #[serde(deserialize_with = "deserialize_food_info")]
     #[serde(default)]
     pub food_info: FoodInfo,
     pub allergens: Option<String>,
+}
+
+impl Default for AdditionalDietInfo {
+    fn default() -> Self {
+        AdditionalDietInfo {
+            food_info: FoodInfo::default(),
+            allergens: None,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

@@ -57,7 +57,7 @@
         name = "ghcr.io/thundertheidiot/sodexobot";
         tag = "latest";
 
-        contents = "${default}";
+        contents = [default pkgs.cacert];
 
         config = {
           Cmd = "/bin/sodexobot";

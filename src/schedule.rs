@@ -1,5 +1,6 @@
 use chrono::Local;
 use chrono::TimeZone;
+use chrono_tz::Europe::Helsinki;
 use serde::Deserialize;
 use serenity::all::parse_username;
 use crate::lista::fetch_day;
@@ -47,7 +48,7 @@ pub fn create_scheduled_day_post<S: ToString>(
 ) -> Result<JobLocked, JobSchedulerError> {
     let ctx = Arc::new(ctx.clone());
 
-    Job::new_async_tz(cron, Local, move |_uuid, _l| {
+    Job::new_async_tz(cron, Helsinki, move |_uuid, _l| {
         let ctx = ctx.clone();
         Box::pin(async move {
             let day = chrono::Local::now()
@@ -95,13 +96,20 @@ pub async fn save_jobs(
     Ok(())
 }
 
+/// Ajastaa päivän ruokalistaviestin
+/// Ajastus noudattaa cron formaattia ja tukee myös sekunteja, eli
+/// 
+/// sec min hour day-of-month month day-of-week
+/// *   *   *    *            *     *
+/// Esimerkiksi 0 0 7 * * mon,tue,wed,thu,fri
+/// Lähettää viestin joka viikonpäivänä kello 7 aamulla
 #[poise::command(
     slash_command,
     required_permissions = "MANAGE_MESSAGES",
 )]
 pub async fn schedule_day(
     ctx: Context<'_>,
-    #[description = "Cron schedule"] cron: String,
+    #[description = "Cron ajastus"] cron: String,
 ) -> Result<(), Error> {
     ctx.defer().await?;
 

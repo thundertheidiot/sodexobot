@@ -1,0 +1,112 @@
+{
+	"meta": {
+		"generated_timestamp": 1756581592,
+		"ref_url": "https://www.sodexo.fi/ravintolat/kokkola/savonia-amk-centria-campus",
+		"ref_title": "Campusravintola",
+		"restaurant_mashie_id": "FI739646K"
+	},
+	"courses": {
+		"1": {
+			"title_fi": "Falafel-papupyttipannua",
+			"title_en": "",
+			"category": "FROM THE FIELD-VEGAN",
+			"meal_category": null,
+			"dietcodes": "M, G",
+			"properties": "M, G",
+			"additionalDietInfo": {
+				"allergens": "Soijapavut"
+			},
+			"recipes": {
+				"0": {
+					"name": "FALAFEL-PAPU PYTTIPANNU.",
+					"ingredients": "peruna pala ktu[Peruna 100%] (48%), kasvis pyörykkä mini falafel kpa 5g[Keitetty kikherne 52 %, sipuli, rapsiöljy, persilja, perunahiutale, valkosipulipyree, jauhot (kikherne, herne), juustokumina, suola, sakeuttamisaine (metyyliselluloosa), korianteri, nostatusaine (E500), chilijauhe.] (19%), sipuli kuorittu[Sipuli.] (14%), papu soija rpa 1kg[soijapapu] (7%), vihannessekoitus europa 2,5kg rpa[oranssi porkkana 25 % (Belgia), keltainen porkkana 25 % (Belgia), romano-papu 25 % (Belgia), parsakaali 25 % (Espanja)] (7%), kapris 935g[kapris, vesi, viinietikka, suola] (2%), valkosipulikuutio rpa 250g[Valkosipuli.] (2%), tahna puré savuchili 750g[Vesi, maltodekstriini, kasviöljy (palmu), cayennepippuri 7 %, suola, etikka, sokeri, sitruskuoren kuitu, savustettu chilijauhe 3 %(chipotle), sakeuttamisaine (ksantaanikumi).] (0%), paprika jauhettu 500g[Paprika jauhettu] (0%)",
+					"nutrients": "Energia/Energy: 415.98 kJ | Energia/Energy: 99.34 kcal | Rasva/Fat: 2.83 g | Hiilihydraatit/Carbohydrate: 14.78 g | Proteiinit/Protein: 3.84 g | Kuidut/Fibre: 3.04 g | Suola/Salt: 0.32 g"
+				},
+				"hideAll": {
+					"dietcodes": "M, G"
+				}
+			}
+		},
+		"2": {
+			"title_fi": "Chili-korianteri tomaattikeittoa",
+			"title_en": "",
+			"category": "FROM THE SOUP BOWL",
+			"meal_category": null,
+			"dietcodes": "M, G",
+			"properties": "M, G",
+			"recipes": {
+				"0": {
+					"name": "TOMAATTI-CHILI-KORIANTERIKEITTO vegaaninen.",
+					"ingredients": "tomaatti murska 5kg[tomaatti 100 %] (43%), Vesi (38%), sipuli kuutio rpa 2,5kg[Sipuli.] (12%), tomaatti sose 4,5kg[tomaatti. Kuiva-ainepitoisuus: 28#30 %] (3%), öljy rapsi menu 10l[] (2%), sokeri kide säkki 25kg[Sokeri] (1%), paprika chili punainen[] (1%), liemijauhe kasvis gtm vähäsuol. 5kg[Suola, maltodekstriini, kasvisjauhe 25% (palsternakka 6,3%, kukkakaali 3,9%, sipuli 3,9%, purjosipuli 3,9%, valkosipuli 2,6%, valkokaali 2,0%, porkkanamehu 2,0%, lipstikanjuuri 0,7%, juuripersilja 0,1%), luontainenaromi, ekstra neitsytoliiviöljy, aromit, sienimehutiiviste. Valmiin liemensuolapitoisuus on 0,3 %.] (1%), suola jodioitu 1kg[Suola (NaCl) väh. 99,8 %, kaliumjodidi (Kl), paakkuuntumisenestoaine (E535). Jodi lisätty kaliumjodidina. Yksi kilo ruokasuolaa sisä ltää 25 mg jodia] (0%), korianteri 100g pnt[] (0%), valkosipulikuutio rpa 250g[Valkosipuli.] (0%), juustokumina jeera 430g[Juustokumina] (0%), korianteri jauhettu 355g[Korianteri] (0%)",
+					"nutrients": "Energia/Energy: 165.20 kJ | Energia/Energy: 39.54 kcal | Rasva/Fat: 2.10 g | Hiilihydraatit/Carbohydrate: 3.91 g | Proteiinit/Protein: 0.92 g | Kuidut/Fibre: 1.22 g | Suola/Salt: 0.47 g"
+				},
+				"hideAll": {
+					"dietcodes": "M, G"
+				}
+			}
+		},
+		"3": {
+			"title_fi": "Tonnikalapatonki",
+			"title_en": "",
+			"category": "From our bakery",
+			"meal_category": null,
+			"dietcodes": "M",
+			"properties": "M",
+			"additionalDietInfo": {
+				"allergens": "Kala, Vehnä, Sinappi"
+			},
+			"recipes": {
+				"0": {
+					"name": "LOUNASPATONKI Tonnikala.",
+					"ingredients": "patonki rtu 2x300g[VEHNÄjauho, vesi, hiiva, suola, mallasVEHNÄjauho, VEHNÄtaikinajuuri, jauhonparanne (askorbiinihappo). Saattaa sisältää pieniä määriä muita gluteenia sisältäviä viljoja (ruis, kaura, ohra) ja seesaminsiemeniä. ] (48%), tonnikala pala öljyssä ktu 2,9/3kg[tonnikala, auringonkukkaöljy, suola.] (19%), majoneesi vegaani 1,8kg[Rypsiöljy 51 %, vesi, etikka, SINAPPI (vesi, SINAPINSIEMEN, etikka, sokeri, suola, säilöntäaine E 202), muunnettu maissi- ja perunatärkkelys, sokeri, jodioitu suola, sakeuttamisaine (E 415), säilöntäaine (E 202).] (13%), tomaatti[Tomaatti.] (10%), kurkku[Kurkku.] (6%), salaatti kuningatar[Romainsalaatti, frizeesalaatti, punasalaatti 33/33/33] (3%), tilli 250g tuore pnt[] (1%)",
+					"nutrients": "Energia/Energy: 1000.68 kJ | Energia/Energy: 238.12 kcal | Rasva/Fat: 10.33 g | Hiilihydraatit/Carbohydrate: 28.13 g | Proteiinit/Protein: 8.94 g | Kuidut/Fibre: 1.26 g | Suola/Salt: 0.85 g"
+				},
+				"hideAll": {
+					"dietcodes": "M"
+				}
+			}
+		},
+		"4": {
+			"title_fi": "Persikka-ananassmoothie",
+			"title_en": "",
+			"category": "FROM THE SWEET",
+			"meal_category": null,
+			"dietcodes": "L, G",
+			"properties": "L, G",
+			"additionalDietInfo": {
+				"allergens": "Maito"
+			},
+			"recipes": {
+				"0": {
+					"name": "PERSIKKA-ANANASSMOOTHIE.",
+					"ingredients": "jogurtti maustamaton ltn 5kg[Pastöroitu MAITO, hapate ja D-vitamiini.] (42%), ananas murskattu säilyke 3,06/2,2kg[ananas, ananastäysmehu.] (38%), persikka kuutio säilyke 2,6kg[persikka, tiivisteestä valmistettu rypäletäysmehu,happamuudensäätöaine (sitruunahappo) ] (10%), sokeri fariini 500g[Sokeri ja ruokosokerisiirappi] (6%), mehu sitruuna 1,0l[Sitruunatäysmehu tiivisteestä, C-vitamiini.] (4%)",
+					"nutrients": "Energia/Energy: 314.88 kJ | Energia/Energy: 74.76 kcal | Rasva/Fat: 1.07 g | Hiilihydraatit/Carbohydrate: 13.83 g | Proteiinit/Protein: 1.78 g | Kuidut/Fibre: 0.48 g | Suola/Salt: 0.00 g"
+				},
+				"hideAll": {
+					"dietcodes": "L, G"
+				}
+			}
+		},
+		"5": {
+			"title_fi": "Jauhelihalasagnettea",
+			"title_en": "",
+			"category": "From our favorites 1",
+			"meal_category": null,
+			"dietcodes": "L",
+			"properties": "L",
+			"additionalDietInfo": {
+				"allergens": "Gluteenia sisältävät viljat ja -tuotteet, Vehnä, Maito"
+			},
+			"recipes": {
+				"0": {
+					"name": "JAUHELIHALASAGNETTE.",
+					"ingredients": "Vesi (40%), tomaatti murska 5kg[tomaatti 100 %] (18%), broileri-nauta jauheliha ktu kg[suomalainen broilerinliha 73%, suomalainen naudanliha 26%, vesi, jodioitu suola.] (11%), pasta lasagne piccolo[DurumVEHNÄjauho, vesi.] (10%), sipuli kuutio rpa 2,5kg[Sipuli.] (5%), porkkana suikale rpa[Porkkana.] (5%), kasvirasvasekoite 15% 1l ltn[rasvaton MAITO, vesi, rypsiöljy, muunnettu maissi- ja tapiokatärkkelys, emulgointiaine (E472e), aromi, väri (karotenoidit)] (4%), tomaatti sose 4,5kg[tomaatti. Kuiva-ainepitoisuus: 28#30 %] (2%), juusto muru ltn[JUUSTO [pastöroitu MAITO, hapate, happamuudensäätöaine (E 509), suola] ja paakkuuntumisenestoaine (E 460).] (2%), maissi tärkkelys promix[Maissitärkkelys] (1%), öljy rapsi menu 10l[] (1%), valkosipulikuutio rpa 250g[Valkosipuli.] (1%), liemijauhe liha gtm 5kg[Suola, maltodekstriini, sokeri, kasvirasva (palmu), hiivauute, naudanlihauute, aromi, paahdettu sipuli, paahdettu sipulimehutiiviste,mausteuute, kurkuma, auringonkukkaöljy.Valmiin liemen suolapitoisuus on 0,3 %.] (0%), suola jodioitu 1kg[Suola (NaCl) väh. 99,8 %, kaliumjodidi (Kl), paakkuuntumisenestoaine (E535). Jodi lisätty kaliumjodidina. Yksi kilo ruokasuolaa sisä ltää 25 mg jodia] (0%), oregano kuivattu lmu 65g[Oregano.] (0%), sokeri kide säkki 25kg[Sokeri] (0%), basilika kuivattu 100g[Basilika.] (0%), pippuri musta rouhittu[Rouhittu mustapippuri] (0%), pippuri chilijauhe 470g[] (0%)",
+					"nutrients": "Energia/Energy: 417.00 kJ | Energia/Energy: 99.73 kcal | Rasva/Fat: 3.29 g | Hiilihydraatit/Carbohydrate: 11.46 g | Proteiinit/Protein: 5.30 g | Kuidut/Fibre: 1.06 g | Suola/Salt: 0.60 g"
+				},
+				"hideAll": {
+					"dietcodes": "L"
+				}
+			}
+		}
+	}
+}

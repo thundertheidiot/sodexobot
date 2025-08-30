@@ -1,3 +1,4 @@
+use crate::types::common::AdditionalDietInfo;
 use crate::types::common::Course;
 use crate::types::day::DailyMenu;
 use crate::types::week::WeeklyMenu;
@@ -18,7 +19,7 @@ where
     #[serde(untagged)]
     enum Helper {
         Map(HashMap<String, Course>),
-        List(Vec<Course>),
+        List(Vec<()>),
     }
 
     match Helper::deserialize(deserializer)? {
@@ -30,6 +31,42 @@ where
 #[test]
 fn test_deserialize_daily_menu() {
     let daily = std::fs::read_to_string("tests/daily.json").expect("no file");
+
+    let menu: DailyMenu = serde_json::from_str(&daily).expect("unable to parse json");
+
+    println!("{:#?}", menu);
+}
+
+#[test]
+fn additional_diet_info() {
+    let json = r#"{
+				"dietcodeImages": [
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sodexo-leaf.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sydan.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/vege.svg",
+					"https://www.sodexo.fi/sites/default/themes/sodexo/images/omena.svg"
+				],
+				"allergens": "Chili, Herneet, Hiivauute, Kaura, Korianteri, Rikkidioksidi ja sulfiitit, Sipuli, Sitrukset, Soijapavut, Valkosipuli"
+}"#;
+
+    let json2 = r#"{
+				"dietcodeImages": [
+				],
+				"allergens": "Chili, Herneet, Hiivauute, Kaura, Korianteri, Rikkidioksidi ja sulfiitit, Sipuli, Sitrukset, Soijapavut, Valkosipuli"
+}"#;
+
+    let json3 = r#"{
+				"allergens": "Chili, Herneet, Hiivauute, Kaura, Korianteri, Rikkidioksidi ja sulfiitit, Sipuli, Sitrukset, Soijapavut, Valkosipuli"
+}"#;
+
+    let _: AdditionalDietInfo = serde_json::from_str(json).expect("unable to parse json");
+    let _: AdditionalDietInfo = serde_json::from_str(json2).expect("unable to parse json");
+    let _: AdditionalDietInfo = serde_json::from_str(json3).expect("unable to parse json");
+}
+
+#[test]
+fn daily_menu_failure() {
+    let daily = std::fs::read_to_string("tests/2025-09-02.json").expect("no file");
 
     let menu: DailyMenu = serde_json::from_str(&daily).expect("unable to parse json");
 

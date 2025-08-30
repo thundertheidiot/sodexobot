@@ -1,4 +1,7 @@
+use chrono::Local;
+use chrono::TimeZone;
 use serde::Deserialize;
+use serenity::all::parse_username;
 use crate::lista::fetch_day;
 use crate::lista::fmt_day;
 use crate::{Context, Error};
@@ -15,6 +18,7 @@ use tokio_cron_scheduler::JobSchedulerError;
 use tokio_cron_scheduler::job::JobLocked;
 use uuid::Uuid;
 
+#[derive(Debug)]
 pub struct DataJob {
     pub uuid: Uuid,
     pub cron: Box<str>,
@@ -43,7 +47,7 @@ pub fn create_scheduled_day_post<S: ToString>(
 ) -> Result<JobLocked, JobSchedulerError> {
     let ctx = Arc::new(ctx.clone());
 
-    Job::new_async(cron, move |_uuid, _l| {
+    Job::new_async_tz(cron, Local, move |_uuid, _l| {
         let ctx = ctx.clone();
         Box::pin(async move {
             let day = chrono::Local::now()
@@ -170,6 +174,8 @@ pub async fn delete_scheduled(
     ctx: Context<'_>,
     #[description = "Uuid of scheduled job"] uuid: String,
 ) -> Result<(), Error> {
+    ctx.defer().await?;
+
     let uuid = Uuid::parse_str(&uuid)?;
 
     {
@@ -177,10 +183,17 @@ pub async fn delete_scheduled(
 	sched.remove(&uuid).await?;
     }
 
-    let mut jobs = ctx.data().job_uuids.lock().await;
-    jobs.retain(|job| job.uuid != uuid);
+    {
+	let mut jobs = ctx.data().job_uuids.lock().await;
+	jobs.retain(|job| job.uuid != uuid);
+    }
 
     save_jobs(ctx).await?;
+
+    ctx.send(
+	CreateReply::default()
+	    .content(format!("Deleted job {uuid}"))
+    ).await?;
 
     Ok(())
 }

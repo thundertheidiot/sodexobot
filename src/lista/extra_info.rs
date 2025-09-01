@@ -89,7 +89,7 @@ pub async fn extra_info(
 
 - Sisältää porsaanlihaa {}
 - Liha Suomesta {}
-- Liha EU:sta {}
+- Liha muualta EU:sta {}
 - Liha muualta {}
 # Allergeenit
 ```

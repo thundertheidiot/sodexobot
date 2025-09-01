@@ -118,6 +118,8 @@ async fn main() -> Result<(), Error> {
                 println!("Logged in as {}", _ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
 
+		ctx.online();
+
                 let mut uuids: Vec<DataJob> = Vec::new();
 
 		let jobs: Vec<StoredJob> = serde_json::from_str(&read_to_string("jobs.json").unwrap_or("[]".to_string()))?;

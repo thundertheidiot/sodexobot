@@ -52,7 +52,7 @@ Hinta: `{price}`
 
 - Sisältää porsaanlihaa {}
 - Liha Suomesta {}
-- Liha EU:sta {}
+- Liha muualta EU:sta {}
 - Liha muualta {}
 "#,
         if diet_info.gluten_free { "✅" } else { "❌" },

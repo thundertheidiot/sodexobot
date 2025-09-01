@@ -50,6 +50,7 @@
         nativeBuildInputs = with pkgs; [
           pkg-config
           openssl
+          cacert
         ];
       };
 

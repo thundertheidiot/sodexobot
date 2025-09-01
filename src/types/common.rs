@@ -60,8 +60,7 @@ impl Default for AdditionalDietInfo {
     }
 }
 
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct FoodInfo {
     pub co2: bool,
     pub heart: bool,
@@ -72,7 +71,6 @@ pub struct FoodInfo {
     pub eu_meat: bool,
     pub other_meat: bool,
 }
-
 
 fn deserialize_food_info<'de, D>(deserializer: D) -> Result<FoodInfo, D::Error>
 where
@@ -142,15 +140,13 @@ where
     }
 }
 
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct DietInfo {
     pub gluten_free: bool,
     pub lactose_free: bool,
     pub milk_free: bool,
     pub low_lactose: bool,
 }
-
 
 fn deserialize_diet_info<'de, D>(deserializer: D) -> Result<DietInfo, D::Error>
 where

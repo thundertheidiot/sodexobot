@@ -200,9 +200,7 @@ pub async fn viikon_lista(ctx: Context<'_>) -> Result<(), Error> {
 const CENTRIA: u8 = 129;
 
 pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
-    let url = format!(
-        "https://sodexo.fi/ruokalistat/output/daily_json/{CENTRIA}/{day}"
-    );
+    let url = format!("https://sodexo.fi/ruokalistat/output/daily_json/{CENTRIA}/{day}");
 
     let menu = reqwest::get(url).await?.json::<DailyMenu>().await?;
 
@@ -210,9 +208,7 @@ pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
 }
 
 pub async fn fetch_week() -> Result<WeeklyMenu, Error> {
-    let url = format!(
-        "https://sodexo.fi/ruokalistat/output/weekly_json/{CENTRIA}",
-    );
+    let url = format!("https://sodexo.fi/ruokalistat/output/weekly_json/{CENTRIA}",);
 
     let menu = reqwest::get(url).await?.json::<WeeklyMenu>().await?;
 

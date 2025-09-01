@@ -1,12 +1,12 @@
-use chrono::Local;
-use chrono::TimeZone;
-use chrono_tz::Europe::Helsinki;
-use serde::Deserialize;
 use crate::lista::fetch_day;
 use crate::lista::fmt_day;
 use crate::{Context, Error};
+use chrono::Local;
+use chrono::TimeZone;
+use chrono_tz::Europe::Helsinki;
 use poise::CreateReply;
 use poise::serenity_prelude::CreateMessage;
+use serde::Deserialize;
 use serde::Serialize;
 use serenity::all::ChannelId;
 use serenity::all::MessageReference;
@@ -83,9 +83,7 @@ pub fn create_scheduled_day_post<S: ToString>(
     })
 }
 
-pub async fn save_jobs(
-    ctx: Context<'_>,
-) -> Result<(), Error> {
+pub async fn save_jobs(ctx: Context<'_>) -> Result<(), Error> {
     let jobs = ctx.data().job_uuids.lock().await;
     let stored_jobs: Vec<StoredJob> = jobs.iter().map(std::convert::Into::into).collect();
 
@@ -97,14 +95,14 @@ pub async fn save_jobs(
 
 /// Ajastaa päivän ruokalistaviestin
 /// Ajastus noudattaa cron formaattia ja tukee myös sekunteja, eli
-/// 
+///
 /// sec min hour day-of-month month day-of-week
 /// *   *   *    *            *     *
 /// Esimerkiksi 0 0 7 * * mon,tue,wed,thu,fri
 /// Lähettää viestin joka viikonpäivänä kello 7 aamulla
 #[poise::command(
     slash_command,
-    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES",
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn schedule_day(
     ctx: Context<'_>,
@@ -131,8 +129,12 @@ pub async fn schedule_day(
     let s = ctx.data().sched.lock().await;
     s.add(job).await?;
 
-    ctx.send(CreateReply::default().content("Ajoitettu ruokalistaviesti luotu").ephemeral(true))
-        .await?;
+    ctx.send(
+        CreateReply::default()
+            .content("Ajoitettu ruokalistaviesti luotu")
+            .ephemeral(true),
+    )
+    .await?;
 
     Ok(())
 }
@@ -141,34 +143,29 @@ pub async fn schedule_day(
     slash_command,
     required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
-pub async fn list_scheduled(
-    ctx: Context<'_>,
-) -> Result<(), Error> {
+pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
     ctx.defer().await?;
 
     let channel_id = ctx.channel_id().get();
 
     let jobs = ctx.data().job_uuids.lock().await;
     fn fmt_job(job: &DataJob) -> String {
-	format!("`{}` - `{}`", job.uuid, job.cron)
+        format!("`{}` - `{}`", job.uuid, job.cron)
     }
 
     let jobs = jobs
-	.iter()
-	.filter_map(|j| {
-	    if j.channel_id == channel_id {
-		Some(fmt_job(j))
-	    } else {
-		None
-	    }
-	})
-	.collect::<Vec<String>>()
-	.join("\n");
+        .iter()
+        .filter_map(|j| {
+            if j.channel_id == channel_id {
+                Some(fmt_job(j))
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
 
-    ctx.send(
-	CreateReply::default()
-	    .content(jobs)
-    ).await?;
+    ctx.send(CreateReply::default().content(jobs)).await?;
 
     Ok(())
 }
@@ -186,21 +183,19 @@ pub async fn delete_scheduled(
     let uuid = Uuid::parse_str(&uuid)?;
 
     {
-	let sched = ctx.data().sched.lock().await;
-	sched.remove(&uuid).await?;
+        let sched = ctx.data().sched.lock().await;
+        sched.remove(&uuid).await?;
     }
 
     {
-	let mut jobs = ctx.data().job_uuids.lock().await;
-	jobs.retain(|job| job.uuid != uuid);
+        let mut jobs = ctx.data().job_uuids.lock().await;
+        jobs.retain(|job| job.uuid != uuid);
     }
 
     save_jobs(ctx).await?;
 
-    ctx.send(
-	CreateReply::default()
-	    .content(format!("Deleted job {uuid}"))
-    ).await?;
+    ctx.send(CreateReply::default().content(format!("Deleted job {uuid}")))
+        .await?;
 
     Ok(())
 }

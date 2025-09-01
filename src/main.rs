@@ -1,9 +1,9 @@
 use crate::lista::viikon_lista;
-use crate::schedule::delete_scheduled;
-use crate::schedule::list_scheduled;
 use crate::schedule::DataJob;
 use crate::schedule::StoredJob;
 use crate::schedule::create_scheduled_day_post;
+use crate::schedule::delete_scheduled;
+use crate::schedule::list_scheduled;
 use crate::schedule::schedule_day;
 use ::serenity::all::ChannelId;
 use poise::serenity_prelude::ClientBuilder;
@@ -30,8 +30,6 @@ pub struct Data {
     job_uuids: Arc<Mutex<Vec<DataJob>>>,
 }
 
-struct UserData {}
-
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Data, Error>;
 
@@ -56,13 +54,14 @@ async fn event_handler(
     _data: &Data,
 ) -> Result<(), Error> {
     if let serenity::FullEvent::InteractionCreate { interaction } = event
-        && let Interaction::Component(c) = interaction {
-            let id = &c.data.custom_id;
+        && let Interaction::Component(c) = interaction
+    {
+        let id = &c.data.custom_id;
 
-            if id.starts_with("infoday") {
-                extra_info(ctx, c).await?;
-            }
+        if id.starts_with("infoday") {
+            extra_info(ctx, c).await?;
         }
+    }
 
     Ok(())
 }
@@ -81,13 +80,13 @@ async fn main() -> Result<(), Error> {
 
     let options = poise::FrameworkOptions {
         commands: vec![
-	    register(),
-	    ruokalista(),
-	    viikon_lista(),
-	    schedule_day(),
-	    list_scheduled(),
-	    delete_scheduled(),
-	],
+            register(),
+            ruokalista(),
+            viikon_lista(),
+            schedule_day(),
+            list_scheduled(),
+            delete_scheduled(),
+        ],
         on_error: |error| Box::pin(on_error(error)),
         event_handler: |ctx, event, framework, data| {
             Box::pin(event_handler(ctx, event, framework, data))
@@ -105,11 +104,12 @@ async fn main() -> Result<(), Error> {
                 println!("Logged in as {}", ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
 
-		ctx.online();
+                ctx.online();
 
                 let mut uuids: Vec<DataJob> = Vec::new();
 
-		let jobs: Vec<StoredJob> = serde_json::from_str(&read_to_string("jobs.json").unwrap_or("[]".to_string()))?;
+                let jobs: Vec<StoredJob> =
+                    serde_json::from_str(&read_to_string("jobs.json").unwrap_or("[]".to_string()))?;
 
                 for i in jobs {
                     if let Ok(job) =

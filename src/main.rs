@@ -6,22 +6,16 @@ use crate::schedule::StoredJob;
 use crate::schedule::create_scheduled_day_post;
 use crate::schedule::schedule_day;
 use ::serenity::all::ChannelId;
-use ::serenity::all::CreateMessage;
 use poise::serenity_prelude::ClientBuilder;
-use poise::serenity_prelude::CreateInteractionResponseMessage;
 use poise::serenity_prelude::GatewayIntents;
 use std::fs::read_to_string;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use uuid::Uuid;
 
-use ::serenity::all::CreateInteractionResponse;
 use ::serenity::all::CreateInteractionResponseFollowup;
 use ::serenity::all::Interaction;
-use poise::CreateReply;
 use poise::serenity_prelude as serenity;
 use std::env;
-use tokio_cron_scheduler::Job;
 use tokio_cron_scheduler::JobScheduler;
 
 pub(crate) mod lista;
@@ -42,17 +36,14 @@ pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Data, Error>;
 
 async fn on_error(error: poise::FrameworkError<'_, Data, Error>) {
-    // This is our custom error handler
-    // They are many errors that can occur, so we only handle the ones we want to customize
-    // and forward the rest to the default handler
     match error {
-        poise::FrameworkError::Setup { error, .. } => panic!("Failed to start bot: {:?}", error),
+        poise::FrameworkError::Setup { error, .. } => panic!("Failed to start bot: {error:?}"),
         poise::FrameworkError::Command { error, ctx, .. } => {
-            println!("Error in command `{}`: {:?}", ctx.command().name, error,);
+            println!("Error in command `{}`: {error:?}", ctx.command().name);
         }
         error => {
             if let Err(e) = poise::builtins::on_error(error).await {
-                println!("Error while handling error: {}", e)
+                println!("Error while handling error: {e}");
             }
         }
     }
@@ -64,18 +55,14 @@ async fn event_handler(
     _framework: poise::FrameworkContext<'_, Data, Error>,
     _data: &Data,
 ) -> Result<(), Error> {
-    match event {
-        serenity::FullEvent::InteractionCreate { interaction } => {
-            if let Interaction::Component(c) = interaction {
-                let id = &c.data.custom_id;
+    if let serenity::FullEvent::InteractionCreate { interaction } = event
+        && let Interaction::Component(c) = interaction {
+            let id = &c.data.custom_id;
 
-                if id.starts_with("infoday") {
-                    extra_info(ctx, c).await?;
-                }
+            if id.starts_with("infoday") {
+                extra_info(ctx, c).await?;
             }
         }
-        _ => {}
-    }
 
     Ok(())
 }
@@ -113,10 +100,12 @@ async fn main() -> Result<(), Error> {
     scheduler.start().await?;
 
     let framework = poise::Framework::builder()
-        .setup(move |ctx, _ready, framework| {
+        .setup(move |ctx, ready, framework| {
             Box::pin(async move {
-                println!("Logged in as {}", _ready.user.name);
+                println!("Logged in as {}", ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
+
+		ctx.online();
 
                 let mut uuids: Vec<DataJob> = Vec::new();
 

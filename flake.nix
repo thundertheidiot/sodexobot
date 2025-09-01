@@ -50,6 +50,7 @@
         nativeBuildInputs = with pkgs; [
           pkg-config
           openssl
+          cacert
         ];
       };
 
@@ -57,7 +58,10 @@
         name = "ghcr.io/thundertheidiot/sodexobot";
         tag = "latest";
 
-        contents = [default pkgs.cacert];
+        contents = [
+          default
+          pkgs.cacert
+        ];
 
         config = {
           Cmd = "/bin/sodexobot";

@@ -12,11 +12,11 @@ pub struct WeeklyMenu {
     pub mealdates: Vec<Day>,
 }
 
-impl Into<Vec<(String, DailyMenu)>> for WeeklyMenu {
-    fn into(self) -> Vec<(String, DailyMenu)> {
-        let meta = self.meta;
+impl From<WeeklyMenu> for Vec<(String, DailyMenu)> {
+    fn from(val: WeeklyMenu) -> Self {
+        let meta = val.meta;
 
-        self.mealdates
+        val.mealdates
             .into_iter()
             .map(|d| {
                 (

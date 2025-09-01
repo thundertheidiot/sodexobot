@@ -1,7 +1,5 @@
 use crate::types::common::AdditionalDietInfo;
 use crate::types::common::Course;
-use crate::types::day::DailyMenu;
-use crate::types::week::WeeklyMenu;
 use serde::Deserialize;
 use serde::Deserializer;
 use std::collections::HashMap;

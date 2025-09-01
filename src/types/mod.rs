@@ -1,4 +1,3 @@
-use crate::types::common::AdditionalDietInfo;
 use crate::types::common::Course;
 use serde::Deserialize;
 use serde::Deserializer;
@@ -15,6 +14,7 @@ where
 {
     #[derive(Deserialize)]
     #[serde(untagged)]
+    #[allow(dead_code)] // the Vec<()> is essential for parsing an empty list correctly
     enum Helper {
         Map(HashMap<String, Course>),
         List(Vec<()>),
@@ -64,6 +64,15 @@ fn additional_diet_info() {
     let _: AdditionalDietInfo = serde_json::from_str(json).expect("unable to parse json");
     let _: AdditionalDietInfo = serde_json::from_str(json2).expect("unable to parse json");
     let _: AdditionalDietInfo = serde_json::from_str(json3).expect("unable to parse json");
+}
+
+#[test]
+fn deserialize_empty_day() {
+    use crate::types::day::DailyMenu;
+
+    let json = r#"{"meta":{"generated_timestamp":1756747242,"ref_url":"https:\/\/www.sodexo.fi\/ravintolat\/kokkola\/savonia-amk-centria-campus","ref_title":"Campusravintola","restaurant_mashie_id":"FI739646K"},"courses":[]}"#;
+
+    let _: DailyMenu = serde_json::from_str(json).expect("unable to parse json");
 }
 
 #[test]

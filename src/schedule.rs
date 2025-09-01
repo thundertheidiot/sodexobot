@@ -2,7 +2,6 @@ use crate::lista::fetch_day;
 use crate::lista::fmt_day;
 use crate::{Context, Error};
 use chrono::Local;
-use chrono::TimeZone;
 use chrono_tz::Europe::Helsinki;
 use poise::CreateReply;
 use poise::serenity_prelude::CreateMessage;
@@ -50,7 +49,7 @@ pub fn create_scheduled_day_post<S: ToString>(
     Job::new_async_tz(cron, Helsinki, move |_uuid, _l| {
         let ctx = ctx.clone();
         Box::pin(async move {
-            let day = chrono::Local::now()
+            let day = Local::now()
                 .date_naive()
                 .format("%Y-%m-%d")
                 .to_string();

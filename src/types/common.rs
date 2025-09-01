@@ -42,22 +42,13 @@ pub struct Course {
     pub recipes: Option<RecipesWrapper>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Default, Clone, Deserialize)]
 pub struct AdditionalDietInfo {
     #[serde(rename(deserialize = "dietcodeImages"))]
     #[serde(deserialize_with = "deserialize_food_info")]
     #[serde(default)]
     pub food_info: FoodInfo,
     pub allergens: Option<String>,
-}
-
-impl Default for AdditionalDietInfo {
-    fn default() -> Self {
-        AdditionalDietInfo {
-            food_info: FoodInfo::default(),
-            allergens: None,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Default)]

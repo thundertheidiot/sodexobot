@@ -4,10 +4,7 @@ use chrono::Days;
 use poise::CreateReply;
 use serenity::all::CreateButton;
 use serenity::all::ReactionType;
-use serenity::{
-    all::{Colour, CreateActionRow, CreateEmbed},
-    futures,
-};
+use serenity::all::{Colour, CreateActionRow, CreateEmbed};
 
 use crate::{Context, Error, types::common::Recipe};
 
@@ -38,7 +35,7 @@ fn fmt_course(course: Course) -> CreateEmbed {
     }
 
     embed = embed.description(format!(
-        r#"
+        r"
 Hinta: `{price}`
 - Gluteeniton {}
 - Laktoositon {}
@@ -54,7 +51,7 @@ Hinta: `{price}`
 - Liha Suomesta {}
 - Liha muualta EU:sta {}
 - Liha muualta {}
-"#,
+",
         if diet_info.gluten_free { "✅" } else { "❌" },
         if diet_info.lactose_free { "✅" } else { "❌" },
         if diet_info.milk_free { "✅" } else { "❌" },
@@ -84,22 +81,18 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
         n if n > 0 => {
             let mut buttons: Vec<CreateButton> = Vec::with_capacity(5);
             let mut reply = CreateReply::default().content(format!(
-                r#"
+                r"
     # [{}](<{}>) - {day}
-    {}"#,
+    {}",
                 meta.ref_title,
                 meta.ref_url,
-                if let Some(string) = extra_string {
-                    string
-                } else {
-                    ""
-                }
+                extra_string.unwrap_or_default()
             ));
 
-            for (n, c) in courses.into_iter() {
+            for (n, c) in courses {
                 let name = c.title_fi.clone().unwrap_or("N/A".to_string());
 
-                let mut button = CreateButton::new(format!("infoday_{}_{}", day, n))
+                let mut button = CreateButton::new(format!("infoday_{day}_{n}"))
                     .emoji(ReactionType::Unicode("ℹ️".to_string()));
 
                 match name.len() {
@@ -140,11 +133,11 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
             reply.components(acrs)
         }
         _ => CreateReply::default().content(format!(
-            r#"
+            r"
     # [{}](<{}>)
 
     Ei ruokalistaa päivälle {day}
-    "#,
+    ",
             meta.ref_title, meta.ref_url
         )),
     }
@@ -208,8 +201,7 @@ const CENTRIA: u8 = 129;
 
 pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
     let url = format!(
-        "https://sodexo.fi/ruokalistat/output/daily_json/{}/{}",
-        CENTRIA, day
+        "https://sodexo.fi/ruokalistat/output/daily_json/{CENTRIA}/{day}"
     );
 
     let menu = reqwest::get(url).await?.json::<DailyMenu>().await?;
@@ -219,8 +211,7 @@ pub async fn fetch_day(day: &str) -> Result<DailyMenu, Error> {
 
 pub async fn fetch_week() -> Result<WeeklyMenu, Error> {
     let url = format!(
-        "https://sodexo.fi/ruokalistat/output/weekly_json/{}",
-        CENTRIA,
+        "https://sodexo.fi/ruokalistat/output/weekly_json/{CENTRIA}",
     );
 
     let menu = reqwest::get(url).await?.json::<WeeklyMenu>().await?;

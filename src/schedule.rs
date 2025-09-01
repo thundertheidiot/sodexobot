@@ -1,7 +1,5 @@
 use chrono::Local;
-use chrono::TimeZone;
 use serde::Deserialize;
-use serenity::all::parse_username;
 use crate::lista::fetch_day;
 use crate::lista::fmt_day;
 use crate::{Context, Error};
@@ -31,11 +29,11 @@ pub struct StoredJob {
     pub channel_id: u64,
 }
 
-impl Into<StoredJob> for &DataJob {
-    fn into(self) -> StoredJob {
+impl From<&DataJob> for StoredJob {
+    fn from(val: &DataJob) -> Self {
         StoredJob {
-            cron: self.cron.clone(),
-            channel_id: self.channel_id,
+            cron: val.cron.clone(),
+            channel_id: val.channel_id,
         }
     }
 }
@@ -87,7 +85,7 @@ pub async fn save_jobs(
     ctx: Context<'_>,
 ) -> Result<(), Error> {
     let jobs = ctx.data().job_uuids.lock().await;
-    let stored_jobs: Vec<StoredJob> = jobs.iter().map(|j| j.into()).collect();
+    let stored_jobs: Vec<StoredJob> = jobs.iter().map(std::convert::Into::into).collect();
 
     let data = serde_json::to_string(&stored_jobs)?;
     write("jobs.json", data)?;
@@ -107,7 +105,7 @@ pub async fn schedule_day(
 
     let channel_id = ctx.channel_id();
 
-    let job = create_scheduled_day_post(&ctx.serenity_context(), &cron, channel_id)?;
+    let job = create_scheduled_day_post(ctx.serenity_context(), &cron, channel_id)?;
 
     {
         let mut jobs = ctx.data().job_uuids.lock().await;

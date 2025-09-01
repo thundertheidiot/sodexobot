@@ -10,7 +10,7 @@ use serenity::all::CreateInteractionResponseMessage;
 
 fn fmt_recipe(recipe: &Recipe) -> String {
     format!(
-        r#"
+        r"
 ## {}
 
 ### Ainesosat
@@ -21,13 +21,13 @@ fn fmt_recipe(recipe: &Recipe) -> String {
 ```
 {}
 ```
-"#,
+",
         recipe.name,
         recipe.ingredients.to_string(),
         recipe
             .nutrients
-            .split("|")
-            .map(|s| s.trim_start())
+            .split('|')
+            .map(str::trim_start)
             .collect::<Vec<&str>>()
             .join("\n")
     )
@@ -38,7 +38,7 @@ pub async fn extra_info(
     interaction: &ComponentInteraction,
 ) -> Result<(), Error> {
     let id = &interaction.data.custom_id;
-    println!("{}", id);
+    println!("{id}");
 
     let defer = CreateInteractionResponse::Defer(CreateInteractionResponseMessage::default());
     interaction.create_response(&ctx.http, defer).await?;
@@ -60,9 +60,8 @@ pub async fn extra_info(
         .ok_or("invalid recipe json")?
         .recipes
         .iter()
-        .map(|r| fmt_recipe(&r))
-        .collect::<Vec<String>>()
-        .join("");
+        .map(fmt_recipe)
+        .collect::<String>();
 
     let embed = CreateEmbed::default()
         .title("Reseptit")
@@ -74,7 +73,7 @@ pub async fn extra_info(
     let food_info = course.additional_diet_info.food_info;
 
     let text = format!(
-        r#"
+        r"
 # {title} - {price}
 
 - Gluteeniton {}
@@ -95,7 +94,7 @@ pub async fn extra_info(
 ```
 {}
 ```
-"#,
+",
         if diet_info.gluten_free { "✅" } else { "❌" },
         if diet_info.lactose_free { "✅" } else { "❌" },
         if diet_info.milk_free { "✅" } else { "❌" },

@@ -40,7 +40,7 @@ pub async fn extra_info(
     let id = &interaction.data.custom_id;
     println!("{id}");
 
-    let defer = CreateInteractionResponse::Defer(CreateInteractionResponseMessage::default());
+    let defer = CreateInteractionResponse::Defer(CreateInteractionResponseMessage::default().ephemeral(true));
     interaction.create_response(&ctx.http, defer).await?;
 
     let mut info: Vec<&str> = id.split('_').collect();

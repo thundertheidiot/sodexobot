@@ -148,7 +148,7 @@ pub async fn ruokalista(
     ctx: Context<'_>,
     #[description = "Päivämäärä (YYYY-MM-DD)"] day: Option<String>,
 ) -> Result<(), Error> {
-    ctx.defer().await?;
+    ctx.defer_ephemeral().await?;
 
     let day = match day {
         Some(day) => day,
@@ -170,7 +170,7 @@ pub async fn ruokalista(
 
 #[poise::command(slash_command)]
 pub async fn viikon_lista(ctx: Context<'_>) -> Result<(), Error> {
-    ctx.defer().await?;
+    ctx.defer_ephemeral().await?;
 
     let menu = fetch_week().await?;
     let date: Vec<&str> = menu.timeperiod.split('.').collect();

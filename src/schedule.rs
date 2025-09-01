@@ -63,7 +63,7 @@ pub fn create_scheduled_day_post<S: ToString>(
                         channel_id,
                     ));
                     if let Err(e) = channel_id.send_message(&ctx.http, m).await {
-                        println!("Error {e:#?}");
+                        println!("Error sending message {e:#?}");
                     }
                 }
                 Err(e) => {
@@ -74,7 +74,7 @@ pub fn create_scheduled_day_post<S: ToString>(
                         )
                         .await
                     {
-                        println!("Error {e:#?}");
+                        println!("unable to send error message {e:#?}");
                     }
                 }
             }
@@ -107,9 +107,11 @@ pub async fn schedule_day(
     ctx: Context<'_>,
     #[description = "Cron ajastus"] cron: String,
 ) -> Result<(), Error> {
-    ctx.defer().await?;
+    ctx.defer_ephemeral().await?;
 
     let channel_id = ctx.channel_id();
+
+    let msg = format!("Ajoitettu ruokalista luotu ajastuksella {cron}");
 
     let job = create_scheduled_day_post(ctx.serenity_context(), &cron, channel_id)?;
 
@@ -130,7 +132,8 @@ pub async fn schedule_day(
 
     ctx.send(
         CreateReply::default()
-            .content("Ajoitettu ruokalistaviesti luotu")
+	    // work around borrow checker
+            .content(msg)
             .ephemeral(true),
     )
     .await?;
@@ -143,7 +146,7 @@ pub async fn schedule_day(
     required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
-    ctx.defer().await?;
+    ctx.defer_ephemeral().await?;
 
     let channel_id = ctx.channel_id().get();
 
@@ -152,7 +155,7 @@ pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
         format!("`{}` - `{}`", job.uuid, job.cron)
     }
 
-    let jobs = jobs
+    let mut jobs = jobs
         .iter()
         .filter_map(|j| {
             if j.channel_id == channel_id {
@@ -164,7 +167,15 @@ pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
         .collect::<Vec<String>>()
         .join("\n");
 
-    ctx.send(CreateReply::default().content(jobs)).await?;
+    if jobs.is_empty() {
+	jobs = "Ei ajastettuja ruokalistoja".into();
+    }
+    
+    ctx.send(
+	CreateReply::default()
+	    .content(jobs)
+	    .ephemeral(true)
+    ).await?;
 
     Ok(())
 }
@@ -177,7 +188,7 @@ pub async fn delete_scheduled(
     ctx: Context<'_>,
     #[description = "Uuid of scheduled job"] uuid: String,
 ) -> Result<(), Error> {
-    ctx.defer().await?;
+    ctx.defer_ephemeral().await?;
 
     let uuid = Uuid::parse_str(&uuid)?;
 
@@ -193,7 +204,11 @@ pub async fn delete_scheduled(
 
     save_jobs(ctx).await?;
 
-    ctx.send(CreateReply::default().content(format!("Deleted job {uuid}")))
+    ctx.send(
+	CreateReply::default()
+	    .content(format!("Poistettu ajastettu ruokalista `{uuid}` onnistuneesti"))
+    .ephemeral(true)
+    )
         .await?;
 
     Ok(())

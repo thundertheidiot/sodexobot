@@ -53,7 +53,7 @@ async fn on_error(error: poise::FrameworkError<'_, Data, Error>) {
                 println!("unable to send error message: {e}");
             }
         }
-	EventHandler { error, ctx, event, framework, .. } => {
+	EventHandler { error, event, .. } => {
             println!("Error in event `{}`: {error:?}", event.snake_case_name());
 	}
         error => {

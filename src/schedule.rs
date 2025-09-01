@@ -97,7 +97,7 @@ pub async fn save_jobs(
 
 #[poise::command(
     slash_command,
-    required_permissions = "MANAGE_MESSAGES",
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES",
 )]
 pub async fn schedule_day(
     ctx: Context<'_>,
@@ -132,7 +132,7 @@ pub async fn schedule_day(
 
 #[poise::command(
     slash_command,
-    required_permissions = "MANAGE_MESSAGES"
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn list_scheduled(
     ctx: Context<'_>,
@@ -168,7 +168,7 @@ pub async fn list_scheduled(
 
 #[poise::command(
     slash_command,
-    required_permissions = "MANAGE_MESSAGES"
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn delete_scheduled(
     ctx: Context<'_>,

@@ -28,6 +28,8 @@ where
 
 #[test]
 fn test_deserialize_daily_menu() {
+    use crate::types::day::DailyMenu;
+
     let daily = std::fs::read_to_string("tests/daily.json").expect("no file");
 
     let menu: DailyMenu = serde_json::from_str(&daily).expect("unable to parse json");
@@ -37,6 +39,8 @@ fn test_deserialize_daily_menu() {
 
 #[test]
 fn additional_diet_info() {
+    use crate::types::common::AdditionalDietInfo;
+
     let json = r#"{
 				"dietcodeImages": [
 					"https://www.sodexo.fi/sites/default/themes/sodexo/images/sodexo-leaf.svg",
@@ -64,6 +68,7 @@ fn additional_diet_info() {
 
 #[test]
 fn daily_menu_failure() {
+    use crate::types::day::DailyMenu;
     let daily = std::fs::read_to_string("tests/2025-09-02.json").expect("no file");
 
     let menu: DailyMenu = serde_json::from_str(&daily).expect("unable to parse json");
@@ -73,6 +78,8 @@ fn daily_menu_failure() {
 
 #[test]
 fn test_deserialize_weekly_menu() {
+    use crate::types::week::WeeklyMenu;
+
     let weekly = std::fs::read_to_string("tests/weekly.json").expect("no file");
 
     let menu: WeeklyMenu = serde_json::from_str(&weekly).expect("unable to parse json");

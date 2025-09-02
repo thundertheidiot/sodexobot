@@ -1,4 +1,4 @@
-use poise::FrameworkError::EventHandler;
+use crate::error::on_error;
 use crate::lista::viikon_lista;
 use crate::schedule::DataJob;
 use crate::schedule::StoredJob;
@@ -7,8 +7,6 @@ use crate::schedule::delete_scheduled;
 use crate::schedule::list_scheduled;
 use crate::schedule::schedule_day;
 use ::serenity::all::ChannelId;
-use poise::CreateReply;
-use poise::FrameworkError::{Setup, Command};
 use poise::serenity_prelude::ClientBuilder;
 use poise::serenity_prelude::GatewayIntents;
 use std::fs::read_to_string;
@@ -24,6 +22,7 @@ use tokio_cron_scheduler::JobScheduler;
 pub(crate) mod lista;
 pub(crate) mod schedule;
 pub(crate) mod types;
+pub(crate) mod error;
 
 use crate::lista::extra_info::extra_info;
 use crate::lista::ruokalista;
@@ -35,34 +34,6 @@ pub struct Data {
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Data, Error>;
-
-async fn on_error(error: poise::FrameworkError<'_, Data, Error>) {
-    match error {
-        Setup { error, .. } => panic!("Failed to start bot: {error:?}"),
-        Command { error, ctx, .. } => {
-            println!("Error in command `{}`: {error:?}", ctx.command().name);
-
-            if let Err(e) = ctx
-                .send(
-                    CreateReply::default()
-                        .content(format!("Error: `{error:?}`"))
-                        .ephemeral(true),
-                )
-                .await
-            {
-                println!("unable to send error message: {e}");
-            }
-        }
-	EventHandler { error, event, .. } => {
-            println!("Error in event `{}`: {error:?}", event.snake_case_name());
-	}
-        error => {
-            if let Err(e) = poise::builtins::on_error(error).await {
-                println!("Error while handling error: {e}");
-            }
-        }
-    }
-}
 
 async fn event_handler(
     ctx: &serenity::Context,

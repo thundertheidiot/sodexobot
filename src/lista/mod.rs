@@ -146,12 +146,23 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
 #[poise::command(slash_command)]
 pub async fn ruokalista(
     ctx: Context<'_>,
-    #[description = "Päivämäärä (YYYY-MM-DD)"] day: Option<String>,
+    #[description = "Päivämäärä (YYYY-MM-DD) tai offset (+n) päivää"] day: Option<String>,
 ) -> Result<(), Error> {
     ctx.defer_ephemeral().await?;
 
     let day = match day {
-        Some(day) => day,
+        Some(day) => {
+	    if &day[0..1] == "+" {
+		let n = &day[1..].parse::<u64>()?;
+		let date = chrono::Local::now();
+
+		date.checked_add_days(Days::new(*n)).ok_or("invalid number of days")?
+		    .format("%Y-%m-%d")
+		    .to_string()
+	    } else {
+		day
+	    }
+	},
         None => chrono::Local::now()
             .date_naive()
             .format("%Y-%m-%d")

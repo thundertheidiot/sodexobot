@@ -1,9 +1,9 @@
-use poise::FrameworkError::EventHandler;
-use poise::FrameworkError;
 use crate::Data;
 use crate::Error;
-use poise::FrameworkError::{Setup, Command};
 use poise::CreateReply;
+use poise::FrameworkError;
+use poise::FrameworkError::EventHandler;
+use poise::FrameworkError::{Command, Setup};
 
 pub async fn on_error(error: FrameworkError<'_, Data, Error>) {
     match error {
@@ -22,9 +22,9 @@ pub async fn on_error(error: FrameworkError<'_, Data, Error>) {
                 println!("unable to send error message: {e}");
             }
         }
-	EventHandler { error, event, .. } => {
+        EventHandler { error, event, .. } => {
             println!("Error in event `{}`: {error:?}", event.snake_case_name());
-	}
+        }
         error => {
             if let Err(e) = poise::builtins::on_error(error).await {
                 println!("Error while handling error: {e}");

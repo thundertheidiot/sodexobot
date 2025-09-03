@@ -1,7 +1,7 @@
 use crate::CreateInteractionResponseFollowup;
 use crate::Error;
-use crate::lista::Recipe;
-use crate::lista::fetch_day;
+use crate::list::Recipe;
+use crate::list::fetch_day;
 use ::serenity::all::CreateEmbed;
 use poise::serenity_prelude as serenity;
 use serenity::all::ComponentInteraction;
@@ -40,7 +40,9 @@ pub async fn extra_info(
     let id = &interaction.data.custom_id;
     println!("{id}");
 
-    let defer = CreateInteractionResponse::Defer(CreateInteractionResponseMessage::default().ephemeral(true));
+    let defer = CreateInteractionResponse::Defer(
+        CreateInteractionResponseMessage::default().ephemeral(true),
+    );
     interaction.create_response(&ctx.http, defer).await?;
 
     let mut info: Vec<&str> = id.split('_').collect();

@@ -1,11 +1,8 @@
 use crate::error::on_error;
-use crate::lista::viikon_lista;
+use crate::event::event_handler;
 use crate::schedule::DataJob;
 use crate::schedule::StoredJob;
 use crate::schedule::create_scheduled_day_post;
-use crate::schedule::delete_scheduled;
-use crate::schedule::list_scheduled;
-use crate::schedule::schedule_day;
 use ::serenity::all::ChannelId;
 use poise::serenity_prelude::ClientBuilder;
 use poise::serenity_prelude::GatewayIntents;
@@ -14,18 +11,15 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use ::serenity::all::CreateInteractionResponseFollowup;
-use ::serenity::all::Interaction;
-use poise::serenity_prelude as serenity;
 use std::env;
 use tokio_cron_scheduler::JobScheduler;
 
-pub(crate) mod lista;
+pub(crate) mod commands;
+pub(crate) mod error;
+pub(crate) mod list;
 pub(crate) mod schedule;
 pub(crate) mod types;
-pub(crate) mod error;
-
-use crate::lista::extra_info::extra_info;
-use crate::lista::ruokalista;
+pub(crate) mod event;
 
 pub struct Data {
     sched: Arc<Mutex<JobScheduler>>,
@@ -35,30 +29,6 @@ pub struct Data {
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Data, Error>;
 
-async fn event_handler(
-    ctx: &serenity::Context,
-    event: &serenity::FullEvent,
-    _framework: poise::FrameworkContext<'_, Data, Error>,
-    _data: &Data,
-) -> Result<(), Error> {
-    if let serenity::FullEvent::InteractionCreate { interaction } = event
-        && let Interaction::Component(c) = interaction
-    {
-        let id = &c.data.custom_id;
-
-        if id.starts_with("infoday") {
-            extra_info(ctx, c).await?;
-        }
-    }
-
-    Ok(())
-}
-
-#[poise::command(prefix_command, hide_in_help = true)]
-pub async fn register(ctx: Context<'_>) -> Result<(), Error> {
-    poise::builtins::register_application_commands_buttons(ctx).await?;
-    Ok(())
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -68,12 +38,12 @@ async fn main() -> Result<(), Error> {
 
     let options = poise::FrameworkOptions {
         commands: vec![
-            register(),
-            ruokalista(),
-            viikon_lista(),
-            schedule_day(),
-            list_scheduled(),
-            delete_scheduled(),
+            commands::builtin::register(),
+            commands::list::daily_menu(),
+            commands::list::weekly_menu(),
+            commands::schedule::schedule_day(),
+            commands::schedule::list_scheduled(),
+            commands::schedule::delete_scheduled(),
         ],
         on_error: |error| Box::pin(on_error(error)),
         event_handler: |ctx, event, framework, data| {

@@ -1,12 +1,10 @@
 use crate::types::week::WeeklyMenu;
-use chrono::Datelike;
-use chrono::Days;
 use poise::CreateReply;
 use serenity::all::CreateButton;
 use serenity::all::ReactionType;
 use serenity::all::{Colour, CreateActionRow, CreateEmbed};
 
-use crate::{Context, Error, types::common::Recipe};
+use crate::{Error, types::common::Recipe};
 
 pub mod extra_info;
 
@@ -141,71 +139,6 @@ pub fn fmt_day(day: &str, menu: DailyMenu, extra_string: Option<&str>) -> Create
             meta.ref_title, meta.ref_url
         )),
     }
-}
-
-#[poise::command(slash_command)]
-pub async fn ruokalista(
-    ctx: Context<'_>,
-    #[description = "Päivämäärä (YYYY-MM-DD) tai offset (+n) päivää"] day: Option<String>,
-) -> Result<(), Error> {
-    ctx.defer_ephemeral().await?;
-
-    let day = match day {
-        Some(day) => {
-	    if &day[0..1] == "+" {
-		let n = &day[1..].parse::<u64>()?;
-		let date = chrono::Local::now();
-
-		date.checked_add_days(Days::new(*n)).ok_or("invalid number of days")?
-		    .format("%Y-%m-%d")
-		    .to_string()
-	    } else {
-		day
-	    }
-	},
-        None => chrono::Local::now()
-            .date_naive()
-            .format("%Y-%m-%d")
-            .to_string(),
-    };
-
-    let menu = fetch_day(&day).await?;
-
-    let reply = fmt_day(&day, menu, None);
-
-    // send the message
-    ctx.send(reply.ephemeral(true)).await?;
-
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn viikon_lista(ctx: Context<'_>) -> Result<(), Error> {
-    ctx.defer_ephemeral().await?;
-
-    let menu = fetch_week().await?;
-    let date: Vec<&str> = menu.timeperiod.split('.').collect();
-    let day = date.first().ok_or("invalid date in json")?;
-
-    // TODO this is garbage
-    let date = chrono::Local::now()
-        .with_day(day.parse()?)
-        .ok_or("invalid day")?;
-
-    let menus: Vec<(String, DailyMenu)> = menu.into();
-
-    for (i, (n, m)) in menus.into_iter().enumerate() {
-        let day = date
-            .checked_add_days(Days::new(i as u64))
-            .ok_or("what the fuck")?
-            .format("%Y-%m-%d")
-            .to_string();
-
-        let reply = fmt_day(&day, m, Some(&n));
-        ctx.send(reply).await?;
-    }
-
-    Ok(())
 }
 
 const CENTRIA: u8 = 129;

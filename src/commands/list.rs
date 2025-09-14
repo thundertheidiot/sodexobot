@@ -8,7 +8,7 @@ use crate::{Context, Error};
 
 #[poise::command(
     slash_command,
-    rename = "ruokalista"
+    rename = "ruokalista",
 )]
 pub async fn daily_menu(
     ctx: Context<'_>,
@@ -48,7 +48,7 @@ pub async fn daily_menu(
 
 #[poise::command(
     slash_command,
-    rename = "viikon ruokalista"
+    rename = "viikon-ruokalista"
 )]
 pub async fn weekly_menu(ctx: Context<'_>) -> Result<(), Error> {
     ctx.defer_ephemeral().await?;

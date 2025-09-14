@@ -13,7 +13,8 @@ use uuid::Uuid;
 /// Lähettää viestin joka viikonpäivänä kello 7 aamulla
 #[poise::command(
     slash_command,
-    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES",
+    required_bot_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn schedule_day(
     ctx: Context<'_>,
@@ -55,7 +56,8 @@ pub async fn schedule_day(
 
 #[poise::command(
     slash_command,
-    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES",
+    required_bot_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
     ctx.defer_ephemeral().await?;
@@ -91,7 +93,8 @@ pub async fn list_scheduled(ctx: Context<'_>) -> Result<(), Error> {
 
 #[poise::command(
     slash_command,
-    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
+    required_permissions = "SEND_MESSAGES | MANAGE_MESSAGES",
+    required_bot_permissions = "SEND_MESSAGES | MANAGE_MESSAGES"
 )]
 pub async fn delete_scheduled(
     ctx: Context<'_>,

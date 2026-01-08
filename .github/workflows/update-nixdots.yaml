@@ -16,4 +16,6 @@ jobs:
             -f vps-deploy=true
 name: Update sodexobot in nixdots
 "on":
-  push: {}
+  push:
+    branches:
+      - main

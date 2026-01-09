@@ -20,6 +20,7 @@ pub(crate) mod list;
 pub(crate) mod schedule;
 pub(crate) mod types;
 pub(crate) mod event;
+pub(crate) mod assignments;
 
 pub struct Data {
     sched: Arc<Mutex<JobScheduler>>,

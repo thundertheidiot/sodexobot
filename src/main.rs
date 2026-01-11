@@ -1,3 +1,5 @@
+use chrono::DateTime;
+use crate::assignments::time_parser::parse_time;
 use crate::error::on_error;
 use crate::event::event_handler;
 use crate::schedule::DataJob;
@@ -33,6 +35,11 @@ pub type Context<'a> = poise::Context<'a, Data, Error>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+
+    println!("{:#?}", DateTime::parse_from_str("12.1.2026 23.59", "%d.%m.%Y %H.%M"));
+
+    std::process::exit(0);
+
     let token = env::var("DISCORD_TOKEN").expect("Set $DISCORD_TOKEN to your discord token.");
 
     tracing_subscriber::fmt::init();

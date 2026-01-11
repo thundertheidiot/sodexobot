@@ -1,7 +1,7 @@
 use chrono::DateTime;
 use chrono::Utc;
 use std::collections::HashMap;
-// mod parse_time;
+pub mod time_parser;
 
 pub struct Assignment {
     pub id: u64, // doubles as message id
